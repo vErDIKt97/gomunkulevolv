@@ -1,7 +1,8 @@
 package com.hacman.gomunkulevolv;
 
 import com.hacman.gomunkulevolv.abilities.Ability;
-import com.hacman.gomunkulevolv.game.MainGomunkulEvolv;
+import com.hacman.gomunkulevolv.abilities.PossibleAbility;
+import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
 import com.hacman.gomunkulevolv.object.MainCreature;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -19,8 +20,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class HelloApplication extends Application {
 
@@ -51,7 +54,6 @@ public class HelloApplication extends Application {
     private GridPane enemyCharPane;
     private GridPane centre;
     private Button levelUpButton;
-
     private Stage lvlUpWindow;
     private BorderPane lvlUpBorderPane;
     private GridPane abilityGridPane;
@@ -167,7 +169,15 @@ public class HelloApplication extends Application {
         return mouseEvent -> {
             lvlUpWindow.show();
             ((Node) (mouseEvent.getSource())).getScene().getWindow().hide();
+            refreshAbilityAvaleble();
         };
+    }
+
+    private void refreshAbilityAvaleble() {
+        for (Node button :
+                abilityGridPane.getChildren()) {
+            button.setDisable(gomunkulEvolv.getMainCreature().getSkillPoint() <= 0);
+        }
     }
 
     private void setAlignment() {
@@ -200,7 +210,6 @@ public class HelloApplication extends Application {
             mainBorderPane.setCenter(battleTextArea);
             buttonBox.getChildren().add(buttonFightNext);
             buttonBox.getChildren().add(levelUpButton);
-            //levelUpButton.setDisable(true);
             stage.setWidth(640);
             stage.setHeight(480);
             battleTextArea.setVisible(true);
@@ -218,15 +227,12 @@ public class HelloApplication extends Application {
     }
 
     private void fillAbilityPane(GridPane abilityGridPane, MainGomunkulEvolv mainGomunkulEvolv) {
+        ArrayList<ArrayList<Ability>> organizeAbilityList = getOrganizeAbilityList(mainGomunkulEvolv);
+        addButtonForEachAbility(abilityGridPane, mainGomunkulEvolv, organizeAbilityList);
+    }
+
+    private void addButtonForEachAbility(GridPane abilityGridPane, MainGomunkulEvolv mainGomunkulEvolv, ArrayList<ArrayList<Ability>> organizeAbilityList) {
         Button abilityButton;
-        ArrayList<ArrayList<Ability>> organizeAbilityList = new ArrayList<>();
-        for (Ability ability :
-                MainCreature.getPossibleAbilityList()) {
-            while (organizeAbilityList.size() < ability.getAbilityClass()) {
-                organizeAbilityList.add(new ArrayList<>());
-            }
-            organizeAbilityList.get(ability.getLevel() - 1).add(ability);
-        }
         for (int i = 0; i < organizeAbilityList.size(); i++) {
             for (int j = 0; j < organizeAbilityList.get(i).size(); j++) {
                 abilityGridPane.add(new Button(organizeAbilityList.get(i).get(j).toString()), j, i);
@@ -234,12 +240,31 @@ public class HelloApplication extends Application {
                 abilityButton.addEventHandler(MouseEvent.MOUSE_CLICKED, getHandlerAddAbility(mainGomunkulEvolv, abilityButton.getText()));
             }
         }
+    }
 
+    @NotNull
+    private ArrayList<ArrayList<Ability>> getOrganizeAbilityList(MainGomunkulEvolv mainGomunkulEvolv) {
+        ArrayList<ArrayList<Ability>> organizeAbilityList = new ArrayList<>();
+        for (Map.Entry<PossibleAbility, Ability> entry : MainCreature.getPossibleAbilityList().entrySet()) {
+            Ability ability = entry.getValue();
+            PossibleAbility abilityName = entry.getKey();
+            while (organizeAbilityList.size() < ability.getClassAbility()) {
+                organizeAbilityList.add(new ArrayList<>());
+            }
+            organizeAbilityList.get(ability.getClassAbility() - 1).add(ability);
+            Ability abilityFromCur = mainGomunkulEvolv.getMainCreature().getCurrentAbilityList().get(abilityName);
+            if (abilityFromCur != null) {
+                if (ability.equals(abilityFromCur)) {
+                    ability.setAbilityLevel(abilityFromCur.getAbilityLevel());
+                }
+            }
+        }
+        return organizeAbilityList;
     }
 
     private EventHandler<MouseEvent> getHandlerAddAbility(MainGomunkulEvolv mainGomunkulEvolv, String title) {
         return mouseEvent -> {
-            mainGomunkulEvolv.setMainCreature(mainGomunkulEvolv.getMainCreature().spendSkillPoint(title));
+            mainGomunkulEvolv.getMainCreature().spendSkillPoint(title);
             refreshLvlUpAbilityPane(mainGomunkulEvolv);
         };
     }
@@ -248,6 +273,7 @@ public class HelloApplication extends Application {
         abilityGridPane = new GridPane();
         fillAbilityPane(abilityGridPane, mainGomunkulEvolv);
         lvlUpBorderPane.setCenter(abilityGridPane);
+        refreshAbilityAvaleble();
     }
 
     public Node getNodeByRowColumnIndex(final int column, final int row, GridPane gridPane) {

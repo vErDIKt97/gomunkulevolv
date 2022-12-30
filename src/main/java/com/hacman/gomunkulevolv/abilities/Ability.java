@@ -1,17 +1,13 @@
 package com.hacman.gomunkulevolv.abilities;
 
-public class Ability {
+import com.hacman.gomunkulevolv.object.Creature;
+import org.jetbrains.annotations.NotNull;
+
+public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBattle, OnAttacked {
+
     private String title;
     private int abilityClass;
-
     private int abilityLevel;
-
-    public static final String vampireAbility = "Vampiring";
-    public static final String regenerationAbility = "Regeneration";
-    public static final String evadeAbility = "Evading";
-    public static final String spikeAbility = "Spike";
-    public static final String toxicAttackAbility = "Toxin Attack";
-    public static final String toxicSkinAbility = "Toxic Skin";
 
     @Override
     public String toString() {
@@ -21,39 +17,34 @@ public class Ability {
     public Ability(int abilityClass, String title) {
         this.abilityClass = abilityClass;
         this.title = title;
-    }
-
-    public Ability(String title) {
-        switch (title) {
-            case evadeAbility -> {
-                this.abilityClass = 1;
-                this.title = evadeAbility;
-            }
-            case spikeAbility -> {
-                this.abilityClass = 1;
-                this.title = spikeAbility;
-            }
-            case toxicAttackAbility -> {
-                this.abilityClass = 1;
-                this.title = toxicAttackAbility;
-            }
-            case toxicSkinAbility -> {
-                this.abilityClass = 1;
-                this.title = toxicSkinAbility;
-            }
-            case vampireAbility -> {
-                this.abilityClass = 1;
-                this.title = vampireAbility;
-            }
-            case regenerationAbility -> {
-                this.abilityClass = 1;
-                this.title = regenerationAbility;
-            }
-        }
         this.abilityLevel = 0;
     }
 
-    public int getLevel() {
+    public static Ability newAbility(@NotNull PossibleAbility title) {
+        switch (title) {
+            case EVADE -> {
+                return new EvadeAbility(1, "Evading");
+            }
+            case SPIKE -> {
+                return new SpikeAbility(1,"Spike");
+            }
+            case TOXIC_ATTACK -> {
+                return new ToxAtkAbility(1, "Toxic Attack");
+            }
+            case TOXIC_SKIN -> {
+                return new ToxSkinAbility(1, "Toxic Skin");
+            }
+            case VAMPIRE -> {
+                return new VampireAbility(1, "Vampire");
+            }
+            case REGENERATION -> {
+                return new RegenAbility(1, "Regeneration");
+            }
+        }
+        return null;
+    }
+
+    public int getClassAbility() {
         return this.abilityClass;
     }
 
@@ -63,10 +54,6 @@ public class Ability {
 
     public void setTitle(String title) {
         this.title = title;
-    }
-
-    public int getAbilityClass() {
-        return abilityClass;
     }
 
     public void setAbilityClass(int abilityClass) {
@@ -84,4 +71,30 @@ public class Ability {
     public void lvlUp() {
         this.abilityLevel++;
     }
+
+    @Override
+    public boolean isAtkSuccess(Creature curCreature, Creature enemy) {
+        return true;
+    }
+
+    @Override
+    public float onDefense(Creature curCreature, Creature enemy) {
+        return 1;
+    }
+
+    @Override
+    public void onSuccessAttack(Creature creature, @NotNull Creature enemy) {
+
+    }
+
+    @Override
+    public void onStartBattle(Creature creature) {
+
+    }
+
+    public boolean equals(Ability obj) {
+        return this.title.equals(obj.title);
+    }
+
+
 }

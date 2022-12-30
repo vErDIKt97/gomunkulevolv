@@ -1,24 +1,32 @@
-package com.hacman.gomunkulevolv.game;
+package com.hacman.gomunkulevolv.game.session;
 
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
 import com.hacman.gomunkulevolv.controller.Battle;
 import com.hacman.gomunkulevolv.controller.EnemyCreator;
 import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.object.MainCreature;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class MainGomunkulEvolv {
+
+    public static boolean sessionOver;
+    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    private Creature curEnemy;
     private int enemyLevel = 1;
     private float progress = 1;
     private PlayableCharacter mainCreature = new MainCreature(1, "Gomunkul");
     private final EnemyCreator enemyCreator;
     private final ArrayList<Creature> enemyCreatureList;
-    private Thread mainCharThread;
-    private Thread enemyCharThread;
+    private Future<?> mainCharThread;
+    private Future<?> enemyCharThread;
 
     public PlayableCharacter getMainCreature() {
         return mainCreature;
@@ -37,24 +45,28 @@ public class MainGomunkulEvolv {
         levelUpButton.setDisable(true);
         changeButtonAvailable(fightButton);
         battleTextArea.setText("");
-        Creature enemy = enemyCreatureList.get(0);
-        mainCharThread = new Thread(new Battle(mainCreature.getCreature(),enemy,battleTextArea,enemyCharThread));
-        enemyCharThread = new Thread(new Battle(enemy,mainCreature.getCreature(),battleTextArea,mainCharThread));
-
-        mainCharThread.start();
-        enemyCharThread.start();
+        Battle.setBattleEnd(false);
+        curEnemy = enemyCreatureList.get(0);
+        Battle mainBattle = new Battle(mainCreature.getCreature(), curEnemy, battleTextArea, enemyCharThread);
+        Battle enemyBattle = new Battle(curEnemy, mainCreature.getCreature(), battleTextArea, mainCharThread);
+        mainBattle.setEnemyCharThread(enemyCharThread);
+        mainCharThread = executorService.submit(mainBattle);
+        enemyCharThread = executorService.submit(enemyBattle);
         new Thread(() -> {
-            while (mainCharThread.isAlive() && enemyCharThread.isAlive()) {
-                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, enemy, enemyText1);
+            while (mainCharThread.state() == Future.State.RUNNING && enemyCharThread.state() == Future.State.RUNNING) {
+                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             }
-            Battle.checkWin(mainCreature, enemy, battleTextArea);
-            refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, enemy, enemyText1);
+            Battle.setBattleEnd(true);
+            Platform.runLater(() -> {
+                Battle.checkWin(mainCreature, curEnemy, battleTextArea);
+                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
+            });
+            refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             refreshEnemyList(enemies, enemyText1);
             changeButtonAvailable(fightButton);
-            if (mainCreature.getSkillPoint() > 0) {
-                changeButtonAvailable(levelUpButton);
-            }
+            changeButtonAvailable(levelUpButton);
         }).start();
+        ;
     }
 
     private void changeButtonAvailable(Button fightButton) {
@@ -80,5 +92,7 @@ public class MainGomunkulEvolv {
             enemyLevel += 1;
         enemyCreator = new EnemyCreator(enemies, enemyLevel, enemyText1);
         enemyCreatureList = enemyCreator.getCreatures();
+        curEnemy = enemyCreatureList.get(0);
+        sessionOver = false;
     }
 }

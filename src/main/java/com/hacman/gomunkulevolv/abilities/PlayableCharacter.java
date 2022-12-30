@@ -4,6 +4,8 @@ import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.object.MainCreature;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.HashMap;
+
 public interface PlayableCharacter {
     int getExp();
 
@@ -23,7 +25,6 @@ public interface PlayableCharacter {
 
     MainCreature getCreature();
 
-    MainCreature addAbility(@NotNull String abilityTitle);
-
-    PlayableCharacter spendSkillPoint(String title);
+    void spendSkillPoint(String title);
+    HashMap<PossibleAbility, Ability> getCurrentAbilityList();
 }

@@ -2,29 +2,34 @@ package com.hacman.gomunkulevolv.object;
 
 import com.hacman.gomunkulevolv.abilities.Ability;
 import com.hacman.gomunkulevolv.abilities.Attackable;
+import com.hacman.gomunkulevolv.abilities.PossibleAbility;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Creature implements Attackable {
     private int curHealth;
     private int maxHealth;
     private int damage;
-    private static final ArrayList<Ability> possibleAbilityList = new ArrayList<>();
+    private static final HashMap<PossibleAbility, Ability> possibleAbilityList = new HashMap<>();
     public static final int possibleAbilityCount = 5;
-    private ArrayList<Ability> currentAbilityList;
+    private final HashMap<PossibleAbility, Ability> currentAbilityList;
     private int level;
     private final String name;
     private boolean alive;
     private final long atkSpeed;
 
     private boolean inBattle = false;
+    private final double levelModify = 1;
 
     public long getAtkSpeed() {
         return atkSpeed;
     }
 
-    public Creature(Creature creature) {
+    @SuppressWarnings("CopyConstructorMissesField")
+    public Creature(@NotNull Creature creature) {
         this.curHealth = creature.getCurHealth();
         this.maxHealth = creature.getMaxHealth();
         this.damage = creature.getDamage();
@@ -40,17 +45,17 @@ public class Creature implements Attackable {
 
     public Creature(int level, String name) {
         this.level = level;
-        this.damage = (int) (new Random().nextInt(5, 10) * getLevelModify());
-        this.curHealth = (int) (new Random().nextInt(60, 100) * getLevelModify());
+        this.damage = (int) (new Random().nextInt(5, 10) * this.getLevelModify());
+        this.curHealth = (int) (new Random().nextInt(60, 100) * this.getLevelModify());
         this.maxHealth = curHealth;
         this.atkSpeed = new Random().nextLong(75, 100) * 10;
-        this.currentAbilityList = new ArrayList<>();
+        this.currentAbilityList = new HashMap<>();
         this.name = name;
         this.alive = true;
     }
 
-    static double getLevelModify() {
-        return 1.2;
+    private double getLevelModify() {
+        return levelModify;
     }
 
     @Override
@@ -58,19 +63,19 @@ public class Creature implements Attackable {
         String creature;
         String health;
         if (this.isAlive()) {
-            health ="\n Health: " + this.curHealth;
+            health = "\n Health: " + this.curHealth;
         } else {
-            health ="\n Health: " + "DEAD";
+            health = "\n Health: " + "DEAD";
         }
-            creature = "Name: " + this.name +
-                    "\n LvL: " + this.level +
-                    health +
-                    "\\" + this.maxHealth +
-                    "\n Attack: " + this.damage +
-                    "\n Attack Speed:" + this.atkSpeed +
-                    "\n Alive: " + this.isAlive() +
-                    "\n Ability: " + this.currentAbilityList;
-            return creature;
+        creature = "Name: " + this.name +
+                "\n LvL: " + this.level +
+                health +
+                "\\" + this.maxHealth +
+                "\n Attack: " + this.damage +
+                "\n Attack Speed:" + this.atkSpeed +
+                "\n Alive: " + this.isAlive() +
+                "\n Ability: " + this.currentAbilityList.values();
+        return creature;
 
     }
 
@@ -87,7 +92,7 @@ public class Creature implements Attackable {
     }
 
     public void setCurHealth(int curHealth) {
-        this.curHealth = curHealth;
+        this.curHealth = Math.min((curHealth), this.maxHealth);
     }
 
     public int getDamage() {
@@ -98,7 +103,7 @@ public class Creature implements Attackable {
         this.damage = damage;
     }
 
-    public ArrayList<Ability> getCurrentAbilityList() {
+    public HashMap<PossibleAbility, Ability> getCurrentAbilityList() {
         return currentAbilityList;
     }
 
@@ -110,14 +115,35 @@ public class Creature implements Attackable {
         this.level = level;
     }
 
-    public boolean takeDamage(Creature enemy) {
-        curHealth -= enemy.getDamage();
-        return true;
-    }
-
     public boolean takeDamage(int damage) {
         curHealth -= damage;
         return true;
+    }
+
+    public void takeDamage(@NotNull Creature fromCreature) {
+        float takenDamage = fromCreature.getDamage();
+        takenDamage *= this.useDefAbility(fromCreature);
+        curHealth -= takenDamage;
+    }
+
+    private float useDefAbility(Creature fromCreature) {
+        float damageRatio = 1;
+        if (this.getCurrentAbilityList().size() > 0) {
+            for (Map.Entry<PossibleAbility, Ability> entry : this.getCurrentAbilityList().entrySet()) {
+                damageRatio *= entry.getValue().onDefense(this, fromCreature);
+            }
+        }
+        return damageRatio;
+    }
+
+    private boolean isHitSuccess(Creature fromCreature) {
+        boolean hitSuccess = true;
+        if (this.getCurrentAbilityList().size() > 0) {
+            for (Map.Entry<PossibleAbility, Ability> entry : this.getCurrentAbilityList().entrySet()) {
+                hitSuccess = hitSuccess && entry.getValue().isAtkSuccess(this, fromCreature);
+            }
+        }
+        return hitSuccess;
     }
 
     public boolean isAlive() {
@@ -131,20 +157,33 @@ public class Creature implements Attackable {
         return name;
     }
 
-    public boolean attack(Creature enemy) {
-        return enemy.takeDamage(this);
+    public boolean attack(@NotNull Creature enemy) {
+        if (enemy.isHitSuccess(this)) {
+            enemy.takeDamage(this);
+            this.useOnSuccessAttackAbility(this, enemy);
+            return true;
+        } else return false;
+    }
+
+    private void useOnSuccessAttackAbility(Creature creature, @NotNull Creature enemy) {
+        if (this.getCurrentAbilityList().size() > 0)
+            for (Map.Entry<PossibleAbility, Ability> entry :
+                    this.getCurrentAbilityList().entrySet()) {
+                Ability ability = entry.getValue();
+                ability.onSuccessAttack(this, enemy);
+            }
     }
 
     public static void fillDefaultPosAbList() {
-        Creature.possibleAbilityList.add(new Ability(Ability.evadeAbility)); //0
-        Creature.possibleAbilityList.add(new Ability(Ability.regenerationAbility)); //1
-        Creature.possibleAbilityList.add(new Ability(Ability.spikeAbility));//2
-        Creature.possibleAbilityList.add(new Ability(Ability.vampireAbility));//3
-        Creature.possibleAbilityList.add(new Ability(Ability.toxicAttackAbility));//4
-        Creature.possibleAbilityList.add(new Ability(Ability.toxicSkinAbility));//5
+        Creature.possibleAbilityList.put(PossibleAbility.EVADE, Ability.newAbility(PossibleAbility.EVADE)); //0
+        Creature.possibleAbilityList.put(PossibleAbility.REGENERATION, Ability.newAbility(PossibleAbility.REGENERATION)); //1
+        Creature.possibleAbilityList.put(PossibleAbility.SPIKE, Ability.newAbility(PossibleAbility.SPIKE));//2
+        Creature.possibleAbilityList.put(PossibleAbility.VAMPIRE, Ability.newAbility(PossibleAbility.VAMPIRE));//3
+        Creature.possibleAbilityList.put(PossibleAbility.TOXIC_ATTACK, Ability.newAbility(PossibleAbility.TOXIC_ATTACK));//4
+        Creature.possibleAbilityList.put(PossibleAbility.TOXIC_SKIN, Ability.newAbility(PossibleAbility.TOXIC_SKIN));//5
     }
 
-    public static ArrayList<Ability> getPossibleAbilityList() {
+    public static HashMap<PossibleAbility, Ability> getPossibleAbilityList() {
         if (possibleAbilityList.size() < possibleAbilityCount - 1) {
             fillDefaultPosAbList();
         }
@@ -156,6 +195,22 @@ public class Creature implements Attackable {
     }
 
     public void setInBattle(boolean inBattle) {
+        boolean curState = this.inBattle;
         this.inBattle = inBattle;
+        if (inBattle != curState && inBattle) useOnStartBattleAbility(this);
+    }
+
+    /**
+     * Use ability affected on start battle
+     *
+     * @param creature affected primary creature
+     */
+    private void useOnStartBattleAbility(Creature creature) {
+        if (this.currentAbilityList.size() > 0)
+            for (Map.Entry<PossibleAbility, Ability> entry :
+                    this.getCurrentAbilityList().entrySet()) {
+                Ability ability = entry.getValue();
+                ability.onStartBattle(creature);
+            }
     }
 }

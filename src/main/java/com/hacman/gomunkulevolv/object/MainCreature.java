@@ -2,12 +2,14 @@ package com.hacman.gomunkulevolv.object;
 
 import com.hacman.gomunkulevolv.abilities.Ability;
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
-import org.jetbrains.annotations.NotNull;
+import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 
 public class MainCreature extends Creature implements PlayableCharacter {
     private int exp;
     private int lvlGate;
     private int skillPoint;
+
+    private double levelModify = 1;
 
     public MainCreature(MainCreature creature) {
         super(creature);
@@ -16,12 +18,16 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.skillPoint = 0;
     }
 
+    public double getLevelModify() {
+        return this.levelModify;
+    }
+
     public MainCreature(int level, String name) {
         super(level, name);
         float stronger = (float) 3;
-        this.setDamage((int) (this.getDamage() * stronger));
-        this.setCurHealth((int) (this.getCurHealth() * stronger));
-        this.setMaxHealth(this.getCurHealth());
+        this.setDamage((int) (this.getDamage() * stronger/2));
+        this.setMaxHealth((int) (this.getCurHealth() * stronger));
+        this.setCurHealth(this.getMaxHealth());
         this.exp = 0;
         this.lvlGate = level * 100;
         this.skillPoint = 0;
@@ -64,10 +70,26 @@ public class MainCreature extends Creature implements PlayableCharacter {
     }
 
     @Override
-    public MainCreature spendSkillPoint(String title) {
+    public void spendSkillPoint(String title) {
         this.skillPoint--;
-        title = title.split(" ",2)[0];
-        return addAbility(title);
+        title = title.split(" ", 2)[0];
+        PossibleAbility ability = PossibleAbility.getAbilityByTitle(title);
+        if (!getCurrentAbilityList().containsKey(ability)) {
+            try {
+                addAbility(ability);
+            } catch (RuntimeException e) {
+                throw new RuntimeException("Chosen Ability not exist");
+            }
+        } else lvlUpAbility(ability);
+    }
+
+    private void addAbility(PossibleAbility ability) throws RuntimeException {
+        this.getCurrentAbilityList().put(ability, Ability.newAbility(ability));
+        lvlUpAbility(ability);
+    }
+
+    private void lvlUpAbility(PossibleAbility ability) {
+        getCurrentAbilityList().get(ability).lvlUp();
     }
 
     @Override
@@ -90,60 +112,4 @@ public class MainCreature extends Creature implements PlayableCharacter {
     public int getSkillPoint() {
         return skillPoint;
     }
-
-    @Override
-    public MainCreature addAbility(@NotNull String abilityTitle) {
-        switch (abilityTitle) {
-            case Ability.evadeAbility -> {
-                getPossibleAbilityList().get(0).lvlUp();
-                return addAbilityEvade();
-            }
-            case Ability.regenerationAbility -> {
-                getPossibleAbilityList().get(1).lvlUp();
-                return addAbilityRegen();
-            }
-            case Ability.spikeAbility -> {
-                getPossibleAbilityList().get(2).lvlUp();
-                return addAbilitySpike();
-            }
-            case Ability.vampireAbility -> {
-                getPossibleAbilityList().get(3).lvlUp();
-                return addAbilityVampire();
-            }
-            case Ability.toxicAttackAbility -> {
-                getPossibleAbilityList().get(4).lvlUp();
-                return addAbilityToxicAttack();
-            }
-            case Ability.toxicSkinAbility -> {
-                getPossibleAbilityList().get(5).lvlUp();
-                return addAbilityToxicSkin();
-            }
-        }
-        return null;
-    }
-
-   private ToxicSkinMainCreature addAbilityToxicSkin() {
-        return new ToxicSkinMainCreature(this);
-    }
-
-    private ToxicAtkMainCreature addAbilityToxicAttack() {
-        return new ToxicAtkMainCreature(this);
-    }
-
-    private SpikeMainCreature addAbilitySpike() {
-        return new SpikeMainCreature(this);
-    }
-
-    private RegenMainCreature addAbilityRegen() {
-        return new RegenMainCreature(this);
-    }
-
-    public VampireMainCreature addAbilityVampire() {
-        return new VampireMainCreature(this);
-    }
-
-    public EvadeMainCreature addAbilityEvade() {
-        return new EvadeMainCreature(this);
-    }
 }
-

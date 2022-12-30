@@ -1,17 +1,27 @@
 package com.hacman.gomunkulevolv.controller;
 
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
+import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
 import com.hacman.gomunkulevolv.object.Creature;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
+
+import java.util.concurrent.Future;
 
 public class Battle implements Runnable {
     private Creature mainCreature;
     private Creature enemy;
     private TextArea battleTextArea;
-    private Thread enemyCharThread;
 
-    public Battle(Creature mainCreature, Creature enemy, TextArea battleTextArea, Thread enemyCharThread) {
+    public static boolean battleEnd;
+
+    public void setEnemyCharThread(Future enemyCharThread) {
+        this.enemyCharThread = enemyCharThread;
+    }
+
+    private Future enemyCharThread;
+
+    public Battle(Creature mainCreature, Creature enemy, TextArea battleTextArea, Future enemyCharThread) {
         this.mainCreature = mainCreature;
         this.enemy = enemy;
         this.battleTextArea = battleTextArea;
@@ -30,33 +40,41 @@ public class Battle implements Runnable {
             mainCreature.defEnemy(enemy);
         } else {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), "YOU LOSE!"));
+            MainGomunkulEvolv.sessionOver = true;
         }
         setCaretOnEnd(battleTextArea);
+
     }
 
     @Override
     public void run() {
         while (enemy.isAlive() && mainCreature.isAlive()) {
+            attackDelay();
             Platform.runLater(() -> {
-                battleTextArea.setText(addBattleLine(battleTextArea.getText(), getAttack()));
-                setCaretOnEnd(battleTextArea);
+                if (!isBattleEnd()) {
+                    battleTextArea.setText(addBattleLine(battleTextArea.getText(), getAttack()));
+                    setCaretOnEnd(battleTextArea);
+                }
             });
-            try {
-                Thread.sleep(mainCreature.getAtkSpeed());
-            } catch (InterruptedException e) {
-                System.out.println("Thread Dead");
-                mainCreature.setInBattle(false);
-                enemy.setInBattle(false);
-            } catch (NullPointerException e) {
-                System.out.println("Nothing to kill");
-            }
         }
         this.mainCreature.setInBattle(false);
         this.enemy.setInBattle(false);
         try {
-            enemyCharThread.interrupt();
+            enemyCharThread.cancel(true);
         } catch (Exception e) {
-            System.out.println("Nothing to interrupt");
+            System.out.println(enemyCharThread.isCancelled());
+        }
+    }
+
+    private void attackDelay() {
+        try {
+            Thread.sleep(mainCreature.getAtkSpeed());
+        } catch (InterruptedException e) {
+            System.out.println("Thread Dead");
+            mainCreature.setInBattle(false);
+            enemy.setInBattle(false);
+        } catch (NullPointerException e) {
+            System.out.println("Nothing to kill");
         }
     }
 
@@ -74,6 +92,12 @@ public class Battle implements Runnable {
         return firstLine + "\n" + secondLine;
     }
 
+    public static boolean isBattleEnd() {
+        return battleEnd;
+    }
 
+    public static void setBattleEnd(boolean battleEnd) {
+        Battle.battleEnd = battleEnd;
+    }
 }
 

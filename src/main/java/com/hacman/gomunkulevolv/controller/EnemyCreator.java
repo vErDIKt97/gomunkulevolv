@@ -1,12 +1,10 @@
 package com.hacman.gomunkulevolv.controller;
-
 import com.hacman.gomunkulevolv.object.Creature;
 import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-
 public class EnemyCreator {
     final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
     private final ArrayList<Creature> creatures = new ArrayList<>();

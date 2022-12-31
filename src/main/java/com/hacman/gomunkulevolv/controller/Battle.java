@@ -9,19 +9,20 @@ import javafx.scene.control.TextArea;
 import java.util.concurrent.Future;
 
 public class Battle implements Runnable {
-    private Creature mainCreature;
-    private Creature enemy;
-    private TextArea battleTextArea;
+    private final Creature mainCreature;
+    private final Creature enemy;
+    private final TextArea battleTextArea;
 
     public static boolean battleEnd;
 
-    public void setEnemyCharThread(Future enemyCharThread) {
+    public void setEnemyCharThread(Future<?> enemyCharThread) {
         this.enemyCharThread = enemyCharThread;
     }
 
-    private Future enemyCharThread;
+    private Future<?> enemyCharThread;
 
-    public Battle(Creature mainCreature, Creature enemy, TextArea battleTextArea, Future enemyCharThread) {
+    @SuppressWarnings("ClassEscapesDefinedScope")
+    public Battle(Creature mainCreature, Creature enemy, TextArea battleTextArea, Future<?> enemyCharThread) {
         this.mainCreature = mainCreature;
         this.enemy = enemy;
         this.battleTextArea = battleTextArea;
@@ -34,6 +35,7 @@ public class Battle implements Runnable {
         battleTextArea.positionCaret(battleTextArea.getText().length());
     }
 
+    @SuppressWarnings("ClassEscapesDefinedScope")
     public static void checkWin(PlayableCharacter mainCreature, Creature enemy, TextArea battleTextArea) {
         if (mainCreature.getCreature().isAlive()) {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), mainCreature.getCreature().getName() + " WIN!"));
@@ -84,6 +86,7 @@ public class Battle implements Runnable {
         else return mainCreature.getName() + " fault attack " + enemy.getName();
     }
 
+    @SuppressWarnings("ClassEscapesDefinedScope")
     public static boolean successAttack(Creature mainCreature, Creature enemy) {
         return mainCreature.attack(enemy);
     }

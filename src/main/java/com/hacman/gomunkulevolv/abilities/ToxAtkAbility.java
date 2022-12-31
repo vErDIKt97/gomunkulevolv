@@ -1,16 +1,10 @@
 package com.hacman.gomunkulevolv.abilities;
 
 import com.hacman.gomunkulevolv.object.Creature;
-import org.jetbrains.annotations.NotNull;
 
 public class ToxAtkAbility extends Ability{
     public ToxAtkAbility(int abilityClass, String title) {
         super(abilityClass, title);
-    }
-
-    @Override
-    public void onSuccessAttack(Creature creature, @NotNull Creature enemy) {
-
     }
 
     @Override
@@ -19,12 +13,7 @@ public class ToxAtkAbility extends Ability{
     }
 
     @Override
-    public void onStartBattle(Creature creature) {
-
-    }
-
-    @Override
-    public boolean isAtkSuccess(Creature curCreature, Creature enemy) {
+    public boolean isAtkSuccess(Creature enemy) {
         return  true;
     }
 }

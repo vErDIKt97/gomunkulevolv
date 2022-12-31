@@ -5,8 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBattle, OnAttacked {
 
-    private String title;
-    private int abilityClass;
+    private final String title;
+    private final int abilityClass;
     private int abilityLevel;
 
     @Override
@@ -48,17 +48,23 @@ public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBatt
         return this.abilityClass;
     }
 
-    public String getTitle() {
-        return title;
-    }
+// --Commented out by Inspection START (31.12.2022 1:19):
+//    public String getTitle() {
+//        return title;
+//    }
+// --Commented out by Inspection STOP (31.12.2022 1:19)
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
+// --Commented out by Inspection START (31.12.2022 1:19):
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
+// --Commented out by Inspection STOP (31.12.2022 1:19)
 
-    public void setAbilityClass(int abilityClass) {
-        this.abilityClass = abilityClass;
-    }
+// --Commented out by Inspection START (31.12.2022 1:19):
+//    public void setAbilityClass(int abilityClass) {
+//        this.abilityClass = abilityClass;
+//    }
+// --Commented out by Inspection STOP (31.12.2022 1:19)
 
     public int getAbilityLevel() {
         return abilityLevel;
@@ -73,7 +79,7 @@ public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBatt
     }
 
     @Override
-    public boolean isAtkSuccess(Creature curCreature, Creature enemy) {
+    public boolean isAtkSuccess(Creature enemy) {
         return true;
     }
 

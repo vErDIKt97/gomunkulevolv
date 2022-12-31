@@ -7,5 +7,6 @@ public interface OnSuccessAttack {
     /**
      * called after success attack
      */
+    @SuppressWarnings("unused")
     void onSuccessAttack(Creature creature, @NotNull Creature enemy);
 }

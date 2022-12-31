@@ -2,10 +2,10 @@ package com.hacman.gomunkulevolv.abilities;
 
 import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.object.MainCreature;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
+@SuppressWarnings("unused")
 public interface PlayableCharacter {
     int getExp();
 
@@ -26,5 +26,6 @@ public interface PlayableCharacter {
     MainCreature getCreature();
 
     void spendSkillPoint(String title);
+
     HashMap<PossibleAbility, Ability> getCurrentAbilityList();
 }

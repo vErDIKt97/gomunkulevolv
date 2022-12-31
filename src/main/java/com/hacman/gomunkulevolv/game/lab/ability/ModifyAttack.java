@@ -1,6 +1,10 @@
 package com.hacman.gomunkulevolv.game.lab.ability;
 
+@SuppressWarnings("ALL")
 public class ModifyAttack extends LabAbility{
-    private LabAbilities id = LabAbilities.ATTACK;
-    
+    private final LabAbilities id = LabAbilities.ATTACK;
+
+    public LabAbilities getId() {
+        return id;
+    }
 }

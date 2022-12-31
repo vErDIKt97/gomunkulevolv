@@ -8,5 +8,6 @@ public interface OnDefense {
      * @param enemy the creature with which the fight is going on
      * @return Damage Ratio
      */
+    @SuppressWarnings("unused")
     float onDefense(Creature curCreature, Creature enemy);
 }

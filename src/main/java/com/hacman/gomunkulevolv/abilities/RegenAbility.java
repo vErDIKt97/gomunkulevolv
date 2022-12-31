@@ -2,7 +2,6 @@ package com.hacman.gomunkulevolv.abilities;
 
 import com.hacman.gomunkulevolv.object.Creature;
 import javafx.concurrent.Task;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -15,11 +14,6 @@ public class RegenAbility extends Ability {
 
     public RegenAbility(int abilityClass, String title) {
         super(abilityClass, title);
-    }
-
-    @Override
-    public void onSuccessAttack(Creature creature, @NotNull Creature enemy) {
-
     }
 
     @Override
@@ -41,11 +35,12 @@ public class RegenAbility extends Ability {
     }
 
     @Override
-    public boolean isAtkSuccess(Creature curCreature, Creature enemy) {
+    public boolean isAtkSuccess(Creature enemy) {
         return true;
     }
 
 
+    @SuppressWarnings("BusyWait")
     public void regeneration() {
         while (mainCreature.isInBattle()) {
             mainCreature.setCurHealth(mainCreature.getCurHealth() + regenPerSecond);

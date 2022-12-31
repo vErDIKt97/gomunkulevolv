@@ -1,6 +1,6 @@
 module com.hacman.gomunkulevolv {
     requires javafx.controls;
-    requires javafx.fxml;
+    requires javafx.base;
     requires org.jetbrains.annotations;
 
 

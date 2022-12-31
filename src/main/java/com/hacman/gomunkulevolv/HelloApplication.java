@@ -28,7 +28,6 @@ import java.util.Map;
 public class HelloApplication extends Application {
 
     private Button buttonStart;
-    private Scene mainScene;
     private Scene lvlUpScene;
     private Text enemyText5;
     private VBox enemy5;
@@ -46,7 +45,7 @@ public class HelloApplication extends Application {
     private BorderPane topBorderPane;
     private BorderPane mainBorderPane;
     private Button buttonFightNext;
-    public ArrayList<Text> enemies = new ArrayList<>();
+    public final ArrayList<Text> enemies = new ArrayList<>();
     private MainGomunkulEvolv gomunkulEvolv;
     private Text mainCharText;
     private Text enemyCharText;
@@ -101,6 +100,7 @@ public class HelloApplication extends Application {
         mainBorderPane = new BorderPane();
         topBorderPane = new BorderPane();
         buttonBox = new HBox();
+        centre = new GridPane();
         battleTextArea = new TextArea();
         enemiesPane = new GridPane();
         enemy1 = new VBox();
@@ -113,7 +113,7 @@ public class HelloApplication extends Application {
         enemyText4 = new Text();
         enemy5 = new VBox();
         enemyText5 = new Text();
-        mainScene = new Scene(mainBorderPane);
+        Scene mainScene = new Scene(mainBorderPane);
         mainCharText = new Text();
         enemyCharText = new Text();
         buttonStart = new Button();
@@ -169,11 +169,11 @@ public class HelloApplication extends Application {
         return mouseEvent -> {
             lvlUpWindow.show();
             ((Node) (mouseEvent.getSource())).getScene().getWindow().hide();
-            refreshAbilityAvaleble();
+            refreshAbilityAvailable();
         };
     }
 
-    private void refreshAbilityAvaleble() {
+    private void refreshAbilityAvailable() {
         for (Node button :
                 abilityGridPane.getChildren()) {
             button.setDisable(gomunkulEvolv.getMainCreature().getSkillPoint() <= 0);
@@ -273,7 +273,7 @@ public class HelloApplication extends Application {
         abilityGridPane = new GridPane();
         fillAbilityPane(abilityGridPane, mainGomunkulEvolv);
         lvlUpBorderPane.setCenter(abilityGridPane);
-        refreshAbilityAvaleble();
+        refreshAbilityAvailable();
     }
 
     public Node getNodeByRowColumnIndex(final int column, final int row, GridPane gridPane) {

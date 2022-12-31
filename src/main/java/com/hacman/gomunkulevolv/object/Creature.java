@@ -1,7 +1,6 @@
 package com.hacman.gomunkulevolv.object;
 
 import com.hacman.gomunkulevolv.abilities.Ability;
-import com.hacman.gomunkulevolv.abilities.Attackable;
 import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class Creature implements Attackable {
+public class Creature {
     private int curHealth;
     private int maxHealth;
     private int damage;
@@ -22,25 +21,11 @@ public class Creature implements Attackable {
     private final long atkSpeed;
 
     private boolean inBattle = false;
+    @SuppressWarnings("FieldCanBeLocal")
     private final double levelModify = 1;
 
     public long getAtkSpeed() {
         return atkSpeed;
-    }
-
-    @SuppressWarnings("CopyConstructorMissesField")
-    public Creature(@NotNull Creature creature) {
-        this.curHealth = creature.getCurHealth();
-        this.maxHealth = creature.getMaxHealth();
-        this.damage = creature.getDamage();
-        this.currentAbilityList = creature.getCurrentAbilityList();
-        this.level = creature.level;
-        this.name = creature.getName();
-        this.alive = creature.isAlive();
-        this.atkSpeed = creature.getAtkSpeed();
-        if (possibleAbilityList.size() < possibleAbilityCount - 1) {
-            fillDefaultPosAbList();
-        }
     }
 
     public Creature(int level, String name) {
@@ -115,9 +100,8 @@ public class Creature implements Attackable {
         this.level = level;
     }
 
-    public boolean takeDamage(int damage) {
+    public void takeDamage(int damage) {
         curHealth -= damage;
-        return true;
     }
 
     public void takeDamage(@NotNull Creature fromCreature) {
@@ -140,7 +124,7 @@ public class Creature implements Attackable {
         boolean hitSuccess = true;
         if (this.getCurrentAbilityList().size() > 0) {
             for (Map.Entry<PossibleAbility, Ability> entry : this.getCurrentAbilityList().entrySet()) {
-                hitSuccess = hitSuccess && entry.getValue().isAtkSuccess(this, fromCreature);
+                hitSuccess = hitSuccess && entry.getValue().isAtkSuccess(fromCreature);
             }
         }
         return hitSuccess;
@@ -160,12 +144,12 @@ public class Creature implements Attackable {
     public boolean attack(@NotNull Creature enemy) {
         if (enemy.isHitSuccess(this)) {
             enemy.takeDamage(this);
-            this.useOnSuccessAttackAbility(this, enemy);
+            this.useOnSuccessAttackAbility(enemy);
             return true;
         } else return false;
     }
 
-    private void useOnSuccessAttackAbility(Creature creature, @NotNull Creature enemy) {
+    private void useOnSuccessAttackAbility(@NotNull Creature enemy) {
         if (this.getCurrentAbilityList().size() > 0)
             for (Map.Entry<PossibleAbility, Ability> entry :
                     this.getCurrentAbilityList().entrySet()) {

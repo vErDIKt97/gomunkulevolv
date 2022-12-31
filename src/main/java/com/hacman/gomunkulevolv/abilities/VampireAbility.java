@@ -5,7 +5,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class VampireAbility extends Ability{
 
-    private double vampireRate = 0.1;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final double vampireRate = 0.1;
 
     public VampireAbility(int abilityClass, String title) {
         super(abilityClass, title);
@@ -30,12 +31,7 @@ public class VampireAbility extends Ability{
     }
 
     @Override
-    public void onStartBattle(Creature creature) {
-
-    }
-
-    @Override
-    public boolean isAtkSuccess(Creature curCreature, Creature enemy) {
+    public boolean isAtkSuccess(Creature enemy) {
         return true;
     }
 }

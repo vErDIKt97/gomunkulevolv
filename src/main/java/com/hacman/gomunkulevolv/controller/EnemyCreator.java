@@ -33,6 +33,7 @@ public class EnemyCreator {
         return builder.toString();
     }
 
+    @SuppressWarnings("ClassEscapesDefinedScope")
     public ArrayList<Creature> getCreatures() {
         return creatures;
     }

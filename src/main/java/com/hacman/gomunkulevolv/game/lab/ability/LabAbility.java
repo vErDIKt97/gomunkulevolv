@@ -2,6 +2,7 @@ package com.hacman.gomunkulevolv.game.lab.ability;
 
 import com.hacman.gomunkulevolv.object.Creature;
 
+@SuppressWarnings("unused")
 public abstract class LabAbility {
     private int level;
     private String title;
@@ -31,6 +32,7 @@ public abstract class LabAbility {
         this.cost = cost;
     }
 
+    @SuppressWarnings({"unused", "EmptyMethod"})
     public void modifyCreature(Creature creature) {
     }
 

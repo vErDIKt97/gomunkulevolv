@@ -9,14 +9,8 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private int lvlGate;
     private int skillPoint;
 
-    private double levelModify = 1;
-
-    public MainCreature(MainCreature creature) {
-        super(creature);
-        this.exp = 0;
-        this.lvlGate = creature.getLevel() * 100;
-        this.skillPoint = 0;
-    }
+    @SuppressWarnings("FieldCanBeLocal")
+    private final double levelModify = 1;
 
     public double getLevelModify() {
         return this.levelModify;

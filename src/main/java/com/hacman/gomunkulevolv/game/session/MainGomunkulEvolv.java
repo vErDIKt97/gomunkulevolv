@@ -17,16 +17,26 @@ import java.util.concurrent.Future;
 
 public class MainGomunkulEvolv {
 
+    @SuppressWarnings("unused")
     public static boolean sessionOver;
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private Creature curEnemy;
     private int enemyLevel = 1;
     private float progress = 1;
-    private PlayableCharacter mainCreature = new MainCreature(1, "Gomunkul");
+    private final PlayableCharacter mainCreature = new MainCreature(1, "Hero");
     private final EnemyCreator enemyCreator;
     private final ArrayList<Creature> enemyCreatureList;
     private Future<?> mainCharThread;
     private Future<?> enemyCharThread;
+
+    public MainGomunkulEvolv(ArrayList<Text> enemies, Text enemyText1) {
+        if (progress % 5 == 0)
+            enemyLevel += 1;
+        enemyCreator = new EnemyCreator(enemies, enemyLevel, enemyText1);
+        enemyCreatureList = enemyCreator.getCreatures();
+        curEnemy = enemyCreatureList.get(0);
+        sessionOver = false;
+    }
 
     public PlayableCharacter getMainCreature() {
         return mainCreature;
@@ -36,11 +46,8 @@ public class MainGomunkulEvolv {
         return enemyCreatureList;
     }
 
-    public void setMainCreature(PlayableCharacter mainCreature) {
-        this.mainCreature = mainCreature;
-    }
-
     //Метод битвы между существами
+
     public void fight(Text mainCharText, Text enemyCharText, Text enemyText1, TextArea battleTextArea, ArrayList<Text> enemies, Button fightButton, Button levelUpButton) {
         levelUpButton.setDisable(true);
         changeButtonAvailable(fightButton);
@@ -66,7 +73,6 @@ public class MainGomunkulEvolv {
             changeButtonAvailable(fightButton);
             changeButtonAvailable(levelUpButton);
         }).start();
-        ;
     }
 
     private void changeButtonAvailable(Button fightButton) {
@@ -85,14 +91,5 @@ public class MainGomunkulEvolv {
         }
         progress++;
         this.enemyCreator.refreshListEnemy(enemyCreatureList, enemyLevel, enemyText1);
-    }
-
-    public MainGomunkulEvolv(ArrayList<Text> enemies, Text enemyText1) {
-        if (progress % 5 == 0)
-            enemyLevel += 1;
-        enemyCreator = new EnemyCreator(enemies, enemyLevel, enemyText1);
-        enemyCreatureList = enemyCreator.getCreatures();
-        curEnemy = enemyCreatureList.get(0);
-        sessionOver = false;
     }
 }

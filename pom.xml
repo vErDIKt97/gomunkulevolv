@@ -18,11 +18,13 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
+            <!--suppress MavenPackageVersionRange -->
             <version>19-ea+3</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
+            <!--suppress MavenPackageVersionRange -->
             <version>19-ea+3</version>
         </dependency>
 

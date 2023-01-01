@@ -1,5 +1,6 @@
 package com.hacman.gomunkulevolv.abilities;
 
+import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
 import com.hacman.gomunkulevolv.object.Creature;
 import javafx.concurrent.Task;
 
@@ -16,27 +17,9 @@ public class RegenAbility extends Ability {
         super(abilityClass, title);
     }
 
-    @Override
-
-    public float onDefense(Creature curCreature, Creature enemy) {
-        return 1;
-    }
-
-    @Override
     public void onStartBattle(Creature creature) {
         this.mainCreature = creature;
-        executorService.submit(new Task<>() {
-            @Override
-            protected Object call() {
-                regeneration();
-                return null;
-            }
-        });
-    }
-
-    @Override
-    public boolean isAtkSuccess(Creature enemy) {
-        return true;
+        MainGomunkulEvolv.executorService.submit(this::regeneration);
     }
 
 
@@ -44,7 +27,6 @@ public class RegenAbility extends Ability {
     public void regeneration() {
         while (mainCreature.isInBattle()) {
             mainCreature.setCurHealth(mainCreature.getCurHealth() + regenPerSecond);
-            System.out.println("regen -" + regenPerSecond + " health");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

@@ -1,7 +1,5 @@
 package com.hacman.gomunkulevolv.abilities;
 
-import com.hacman.gomunkulevolv.object.Creature;
-
 import java.util.Random;
 
 public class EvadeAbility extends Ability {
@@ -25,13 +23,8 @@ public class EvadeAbility extends Ability {
         evadeChance = this.evadeChance * this.getAbilityLevel();
     }
 
-    @Override
-    public boolean isAtkSuccess(Creature enemy) {
+    public boolean isAtkSuccess() {
         return !isEvaded();
     }
 
-    @Override
-    public float onDefense(Creature curCreature, Creature enemy) {
-        return super.onDefense(curCreature, enemy);
-    }
 }

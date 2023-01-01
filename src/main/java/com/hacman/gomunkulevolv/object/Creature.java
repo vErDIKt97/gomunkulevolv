@@ -114,17 +114,17 @@ public class Creature {
         float damageRatio = 1;
         if (this.getCurrentAbilityList().size() > 0) {
             for (Map.Entry<PossibleAbility, Ability> entry : this.getCurrentAbilityList().entrySet()) {
-                damageRatio *= entry.getValue().onDefense(this, fromCreature);
+                damageRatio *= entry.getValue().onDefense(fromCreature);
             }
         }
         return damageRatio;
     }
 
-    private boolean isHitSuccess(Creature fromCreature) {
+    private boolean isHitSuccess() {
         boolean hitSuccess = true;
         if (this.getCurrentAbilityList().size() > 0) {
             for (Map.Entry<PossibleAbility, Ability> entry : this.getCurrentAbilityList().entrySet()) {
-                hitSuccess = hitSuccess && entry.getValue().isAtkSuccess(fromCreature);
+                hitSuccess = hitSuccess && entry.getValue().isAtkSuccess();
             }
         }
         return hitSuccess;
@@ -142,14 +142,14 @@ public class Creature {
     }
 
     public boolean attack(@NotNull Creature enemy) {
-        if (enemy.isHitSuccess(this)) {
+        if (enemy.isHitSuccess()) {
             enemy.takeDamage(this);
             this.useOnSuccessAttackAbility(enemy);
             return true;
         } else return false;
     }
 
-    private void useOnSuccessAttackAbility(@NotNull Creature enemy) {
+    private void useOnSuccessAttackAbility(Creature enemy) {
         if (this.getCurrentAbilityList().size() > 0)
             for (Map.Entry<PossibleAbility, Ability> entry :
                     this.getCurrentAbilityList().entrySet()) {

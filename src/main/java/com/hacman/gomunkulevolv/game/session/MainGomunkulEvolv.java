@@ -19,7 +19,7 @@ public class MainGomunkulEvolv {
 
     @SuppressWarnings("unused")
     public static boolean sessionOver;
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
+    public static final ExecutorService executorService = Executors.newCachedThreadPool();
     private Creature curEnemy;
     private int enemyLevel = 1;
     private float progress = 1;

@@ -1,6 +1,7 @@
 package com.hacman.gomunkulevolv.abilities;
 
 import com.hacman.gomunkulevolv.object.Creature;
+import org.jetbrains.annotations.NotNull;
 
 public class SpikeAbility extends Ability{
 
@@ -9,16 +10,9 @@ public class SpikeAbility extends Ability{
         super(abilityClass, title);
     }
 
-    @Override
-    public float onDefense(Creature curCreature, Creature enemy) {
+    public float onDefense(@NotNull Creature enemy) {
         enemy.takeDamage(this.spikeDamage);
-        System.out.println("return - " + this.spikeDamage + " damage");
         return 1;
-    }
-
-    @Override
-    public boolean isAtkSuccess(Creature enemy) {
-        return true;
     }
 
     @Override

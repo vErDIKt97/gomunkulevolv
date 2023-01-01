@@ -3,7 +3,7 @@ package com.hacman.gomunkulevolv.abilities;
 import com.hacman.gomunkulevolv.object.Creature;
 import org.jetbrains.annotations.NotNull;
 
-public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBattle, OnAttacked {
+public abstract class Ability {
 
     private final String title;
     private final int abilityClass;
@@ -78,22 +78,19 @@ public abstract class Ability implements OnSuccessAttack, OnDefense, OnStartBatt
         this.abilityLevel++;
     }
 
-    @Override
-    public boolean isAtkSuccess(Creature enemy) {
+    public boolean isAtkSuccess() {
         return true;
     }
 
-    @Override
-    public float onDefense(Creature curCreature, Creature enemy) {
+    @SuppressWarnings("SameReturnValue")
+    public float onDefense(Creature enemy) {
         return 1;
     }
 
-    @Override
-    public void onSuccessAttack(Creature creature, @NotNull Creature enemy) {
+    public void onSuccessAttack(Creature creature, Creature enemy) {
 
     }
 
-    @Override
     public void onStartBattle(Creature creature) {
 
     }

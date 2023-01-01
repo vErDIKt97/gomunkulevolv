@@ -27,6 +27,7 @@ import java.util.Map;
 
 public class HelloApplication extends Application {
 
+    public final ArrayList<Text> enemies = new ArrayList<>();
     private Button buttonStart;
     private Scene lvlUpScene;
     private Text enemyText5;
@@ -45,7 +46,6 @@ public class HelloApplication extends Application {
     private BorderPane topBorderPane;
     private BorderPane mainBorderPane;
     private Button buttonFightNext;
-    public final ArrayList<Text> enemies = new ArrayList<>();
     private MainGomunkulEvolv gomunkulEvolv;
     private Text mainCharText;
     private Text enemyCharText;

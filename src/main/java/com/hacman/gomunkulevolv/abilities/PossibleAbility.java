@@ -37,7 +37,12 @@ public enum PossibleAbility {
             return "Toxic Skin";
         }
     };
-    public static PossibleAbility getAbilityByTitle (String title) {
+
+    public static PossibleAbility getAbilityByTitle(String title) {
+        String[] words = title.split(" ", 3);
+        if (words.length == 3)
+            title = words[0] + " " + words[1];
+        else title = words[0];
         for (PossibleAbility ability :
                 PossibleAbility.values()) {
             if (title.equals(ability.toString())) return ability;

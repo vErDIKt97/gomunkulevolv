@@ -24,7 +24,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.setCurHealth(this.getMaxHealth());
         this.exp = 0;
         this.lvlGate = level * 100;
-        this.skillPoint = 0;
+        this.skillPoint = 1;
     }
 
     @Override
@@ -32,6 +32,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
         return super.toString() + "\n Exp: " + this.exp + "\\" + this.lvlGate;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public MainCreature getCreature() {
         return this;
@@ -63,10 +64,10 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.skillPoint++;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void spendSkillPoint(String title) {
         this.skillPoint--;
-        title = title.split(" ", 2)[0];
         PossibleAbility ability = PossibleAbility.getAbilityByTitle(title);
         if (!getCurrentAbilityList().containsKey(ability)) {
             try {
@@ -96,12 +97,14 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.lvlGate = lvlGate;
     }
 
+    @SuppressWarnings("unused")
     @Override
     public void defEnemy(Creature enemy) {
         int formulaExp = this.getExp() + enemy.getLevel() * 20;
         this.setExp(formulaExp);
     }
 
+    @SuppressWarnings("unused")
     @Override
     public int getSkillPoint() {
         return skillPoint;

@@ -35,6 +35,7 @@ public class Battle implements Runnable {
         battleTextArea.positionCaret(battleTextArea.getText().length());
     }
 
+
     @SuppressWarnings("ClassEscapesDefinedScope")
     public static void checkWin(PlayableCharacter mainCreature, Creature enemy, TextArea battleTextArea) {
         if (mainCreature.getCreature().isAlive()) {

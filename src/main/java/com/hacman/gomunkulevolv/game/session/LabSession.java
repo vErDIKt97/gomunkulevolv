@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class LabSession {
     private MainCreature mainCreature;
-    private int gensCount = 50;
+    private int gensCount = 0;
     private final HashMap<LabAbilities, LabAbility> curLabAbility = new HashMap<>();
     private final HashMap<LabAbilities, LabAbility> possibleLabAbility = new HashMap<>();
 

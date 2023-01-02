@@ -2,22 +2,29 @@ package com.hacman.gomunkulevolv.game.lab.ability;
 
 import com.hacman.gomunkulevolv.object.Creature;
 
-@SuppressWarnings("unused")
 public abstract class LabAbility {
-    private int level;
+    private int levelLabAbility;
     private String title;
     private int cost;
+    private int classLabAbility;
 
-    public int getLevel() {
-        return level;
-    }
+    public static LabAbility newLabAbility(LabAbilities ability) {
+        switch (ability) {
 
-    public void setLevel(int level) {
-        this.level = level;
-    }
-
-    public String getTitle() {
-        return title;
+            case ATTACK -> {
+                return new ModifyAttack();
+            }
+            case DEFENSE -> {
+                return new ModifyDefence();
+            }
+            case ATTACK_SPEED -> {
+                return new ModifyAtkSpeed();
+            }
+            case MAX_HEALTH -> {
+                return new ModifyMaxHealth();
+            }
+            default -> throw new IllegalStateException("Unexpected value: " + ability);
+        }
     }
 
     public void setTitle(String title) {
@@ -36,4 +43,32 @@ public abstract class LabAbility {
     public void modifyCreature(Creature creature) {
     }
 
+    @Override
+    public String toString() {
+        return title + " " + levelLabAbility + " cost: " + cost;
+    }
+
+    public void lvlUp() {
+        levelLabAbility++;
+    }
+
+    public int getClassLabAbility() {
+        return classLabAbility;
+    }
+
+    public int getLabAbilityLevel() {
+        return levelLabAbility;
+    }
+
+    public void setAbilityLevel(int labAbilityLevel) {
+        this.levelLabAbility = labAbilityLevel;
+    }
+
+    public void setClassLabAbility(int classLabAbility) {
+        this.classLabAbility = classLabAbility;
+    }
+
+    public boolean equals(LabAbility obj) {
+        return this.title.equals(obj.title);
+    }
 }

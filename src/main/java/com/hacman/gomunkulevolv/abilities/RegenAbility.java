@@ -1,14 +1,9 @@
 package com.hacman.gomunkulevolv.abilities;
 
-import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
+import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.Creature;
-import javafx.concurrent.Task;
-
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class RegenAbility extends Ability {
-    private final ExecutorService executorService = Executors.newCachedThreadPool();
     private int regenPerSecond = 2;
 
     private Creature mainCreature;
@@ -19,7 +14,7 @@ public class RegenAbility extends Ability {
 
     public void onStartBattle(Creature creature) {
         this.mainCreature = creature;
-        MainGomunkulEvolv.executorService.submit(this::regeneration);
+        FightSession.executorService.submit(this::regeneration);
     }
 
 

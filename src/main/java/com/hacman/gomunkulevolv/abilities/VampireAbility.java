@@ -20,7 +20,6 @@ public class VampireAbility extends Ability{
         int damage = creature.getDamage();
         double restoredHealth = curHealth + damage * vampireRate;
         creature.setCurHealth((int) restoredHealth);
-        System.out.println("vampire - " + damage * vampireRate + " health");
     }
 
 }

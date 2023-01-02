@@ -26,7 +26,7 @@ public abstract class Ability {
                 return new EvadeAbility(1, "Evading");
             }
             case SPIKE -> {
-                return new SpikeAbility(1,"Spike");
+                return new SpikeAbility(1, "Spike");
             }
             case TOXIC_ATTACK -> {
                 return new ToxAtkAbility(1, "Toxic Attack");

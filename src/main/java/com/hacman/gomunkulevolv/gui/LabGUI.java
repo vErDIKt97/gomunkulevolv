@@ -169,7 +169,7 @@ public class LabGUI {
 
     private void abilityClick(LabSession labSession, String title) {
         labSession.spendGens(title);
-        labSession.appendAbilityModify(labSession.getMainCreature());
+        labSession.appendAbilityModify();
         refreshLvlUpAbilityPane(labSession);
     }
 

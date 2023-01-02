@@ -9,14 +9,17 @@ import java.util.Map;
 
 public class LabSession {
     private MainCreature mainCreature;
-    private int gensCount = 0;
+    private int gensCount = 5000;
     private final HashMap<LabAbilities, LabAbility> curLabAbility = new HashMap<>();
     private final HashMap<LabAbilities, LabAbility> possibleLabAbility = new HashMap<>();
 
     private FightSession curFightSession;
 
+    private MainCreature noModifyMainCreature;
+
     public LabSession() {
         mainCreature = new MainCreature(1,"Hero");
+        noModifyMainCreature = mainCreature;
         fillPosLabAb();
     }
 
@@ -46,22 +49,21 @@ public class LabSession {
     }
 
     public int getGensCount() {
-        if (curFightSession!=null) {
-            gensCount += curFightSession.getEarnedGens();
-        }
         return gensCount;
     }
 
     public void refreshMainCreature() {
         mainCreature = new MainCreature(1, "Hero");
-        appendAbilityModify(mainCreature);
+        noModifyMainCreature = mainCreature;
     }
 
-    public void appendAbilityModify(MainCreature mainCreature) {
+    public void appendAbilityModify() {
+        MainCreature tempCreature = noModifyMainCreature.getCopy();
         for (Map.Entry<LabAbilities, LabAbility> entry :
                 getCurrentLabAbilityMap().entrySet()) {
-            entry.getValue().modifyCreature(mainCreature);
+            entry.getValue().modifyCreature(tempCreature);
         }
+        mainCreature = tempCreature;
     }
 
 
@@ -88,4 +90,5 @@ public class LabSession {
     public void clearCurFightSession() {
         curFightSession = null;
     }
+
 }

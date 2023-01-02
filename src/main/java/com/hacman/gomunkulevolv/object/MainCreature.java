@@ -9,11 +9,14 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private int lvlGate;
     private int skillPoint;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final double levelModify = 1;
+    private double levelModify = 1;
 
-    public double getLevelModify() {
-        return this.levelModify;
+    public MainCreature(MainCreature mainCreature) {
+        super(mainCreature);
+        this.levelModify = mainCreature.getLevelModify();
+        this.exp = mainCreature.getExp();
+        this.lvlGate = mainCreature.getLvlGate();
+        this.skillPoint = mainCreature.getSkillPoint();
     }
 
     public MainCreature(int level, String name) {
@@ -25,6 +28,10 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.exp = 0;
         this.lvlGate = level * 100;
         this.skillPoint = 1;
+    }
+
+    public double getLevelModify() {
+        return this.levelModify;
     }
 
     @Override
@@ -108,5 +115,9 @@ public class MainCreature extends Creature implements PlayableCharacter {
     @Override
     public int getSkillPoint() {
         return skillPoint;
+    }
+
+    public MainCreature getCopy() {
+        return new MainCreature(this);
     }
 }

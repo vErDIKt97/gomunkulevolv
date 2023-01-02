@@ -21,8 +21,20 @@ public class Creature {
     private final long atkSpeed;
 
     private boolean inBattle = false;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final double levelModify = 1;
+    private double levelModify = 1;
+
+    public Creature(Creature creature) {
+        this.curHealth = creature.getCurHealth();
+        this.maxHealth = creature.getMaxHealth();
+        this.atkSpeed = creature.getAtkSpeed();
+        this.levelModify = creature.getLevelModify();
+        this.level = creature.getLevel();
+        this.currentAbilityList = creature.getCurrentAbilityList();
+        this.inBattle = creature.isInBattle();
+        this.alive = creature.isAlive();
+        this.damage = creature.getDamage();
+        this.name = creature.getName();
+    }
 
     public long getAtkSpeed() {
         return atkSpeed;

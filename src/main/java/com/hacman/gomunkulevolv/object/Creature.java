@@ -9,9 +9,9 @@ import java.util.Map;
 import java.util.Random;
 
 public class Creature {
-    private int curHealth;
-    private int maxHealth;
-    private int damage;
+    private double curHealth;
+    private double maxHealth;
+    private double damage;
     private static final HashMap<PossibleAbility, Ability> possibleAbilityList = new HashMap<>();
     public static final int possibleAbilityCount = 5;
     private final HashMap<PossibleAbility, Ability> currentAbilityList;
@@ -21,8 +21,20 @@ public class Creature {
     private final long atkSpeed;
 
     private boolean inBattle = false;
-    @SuppressWarnings("FieldCanBeLocal")
-    private final double levelModify = 1;
+    private double levelModify = 1;
+
+    public Creature(Creature creature) {
+        this.curHealth = creature.getCurHealth();
+        this.maxHealth = creature.getMaxHealth();
+        this.atkSpeed = creature.getAtkSpeed();
+        this.levelModify = creature.getLevelModify();
+        this.level = creature.getLevel();
+        this.currentAbilityList = creature.getCurrentAbilityList();
+        this.inBattle = creature.isInBattle();
+        this.alive = creature.isAlive();
+        this.damage = creature.getDamage();
+        this.name = creature.getName();
+    }
 
     public long getAtkSpeed() {
         return atkSpeed;
@@ -30,16 +42,17 @@ public class Creature {
 
     public Creature(int level, String name) {
         this.level = level;
-        this.damage = (int) (new Random().nextInt(5, 10) * this.getLevelModify());
-        this.curHealth = (int) (new Random().nextInt(60, 100) * this.getLevelModify());
+        Random random = new Random();
+        this.damage = Math.pow(2 * this.level + 5, 2) / 9 + 5 + random.nextDouble(-5,5);
+        this.curHealth = Math.pow(3 * this.level + 8, 2) + 10 + random.nextDouble(-20,20);
         this.maxHealth = curHealth;
-        this.atkSpeed = new Random().nextLong(75, 100) * 10;
+        this.atkSpeed = random.nextLong(75, 100) * 10;
         this.currentAbilityList = new HashMap<>();
         this.name = name;
         this.alive = true;
     }
 
-    private double getLevelModify() {
+    double getLevelModify() {
         return levelModify;
     }
 
@@ -48,15 +61,15 @@ public class Creature {
         String creature;
         String health;
         if (this.isAlive()) {
-            health = "\n Health: " + this.curHealth;
+            health = "\n Health: " + getFormatDouble(this.curHealth);
         } else {
             health = "\n Health: " + "DEAD";
         }
         creature = "Name: " + this.name +
                 "\n LvL: " + this.level +
                 health +
-                "\\" + this.maxHealth +
-                "\n Attack: " + this.damage +
+                "\\" + getFormatDouble(maxHealth) +
+                "\n Attack: " + getFormatDouble(damage) +
                 "\n Attack Speed:" + this.atkSpeed +
                 "\n Alive: " + this.isAlive() +
                 "\n Ability: " + this.currentAbilityList.values();
@@ -64,27 +77,31 @@ public class Creature {
 
     }
 
-    public int getMaxHealth() {
+    private String getFormatDouble(Double i) {
+        return String.format("%.2f", i);
+    }
+
+    public double getMaxHealth() {
         return maxHealth;
     }
 
-    public void setMaxHealth(int maxHealth) {
+    public void setMaxHealth(double maxHealth) {
         this.maxHealth = maxHealth;
     }
 
-    public int getCurHealth() {
+    public double getCurHealth() {
         return curHealth;
     }
 
-    public void setCurHealth(int curHealth) {
+    public void setCurHealth(double curHealth) {
         this.curHealth = Math.min((curHealth), this.maxHealth);
     }
 
-    public int getDamage() {
+    public double getDamage() {
         return damage;
     }
 
-    public void setDamage(int damage) {
+    public void setDamage(double damage) {
         this.damage = damage;
     }
 
@@ -105,7 +122,7 @@ public class Creature {
     }
 
     public void takeDamage(@NotNull Creature fromCreature) {
-        float takenDamage = fromCreature.getDamage();
+        double takenDamage = fromCreature.getDamage();
         takenDamage *= this.useDefAbility(fromCreature);
         curHealth -= takenDamage;
     }
@@ -196,5 +213,9 @@ public class Creature {
                 Ability ability = entry.getValue();
                 ability.onStartBattle(creature);
             }
+    }
+
+    public void restoreHealth(double restoredHealth) {
+        curHealth +=restoredHealth;
     }
 }

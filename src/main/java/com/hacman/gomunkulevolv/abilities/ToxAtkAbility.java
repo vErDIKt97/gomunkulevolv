@@ -1,6 +1,6 @@
 package com.hacman.gomunkulevolv.abilities;
 
-import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
+import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.Creature;
 
 public class ToxAtkAbility extends Ability{
@@ -13,7 +13,7 @@ public class ToxAtkAbility extends Ability{
     @Override
     public void onSuccessAttack(Creature creature, Creature enemy) {
         super.onSuccessAttack(creature, enemy);
-        MainGomunkulEvolv.executorService.submit(() -> intoxicateEnemy(enemy));
+        FightSession.executorService.submit(() -> intoxicateEnemy(enemy));
 
     }
 

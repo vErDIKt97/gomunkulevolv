@@ -1,7 +1,7 @@
 package com.hacman.gomunkulevolv.controller;
 
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
-import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
+import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.Creature;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
@@ -37,16 +37,18 @@ public class Battle implements Runnable {
 
 
     @SuppressWarnings("ClassEscapesDefinedScope")
-    public static void checkWin(PlayableCharacter mainCreature, Creature enemy, TextArea battleTextArea) {
+    public static boolean checkWin(PlayableCharacter mainCreature, Creature enemy, TextArea battleTextArea) {
+        boolean result = false;
         if (mainCreature.getCreature().isAlive()) {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), mainCreature.getCreature().getName() + " WIN!"));
             mainCreature.defEnemy(enemy);
+            result = true;
         } else {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), "YOU LOSE!"));
-            MainGomunkulEvolv.sessionOver = true;
+            FightSession.sessionOver = true;
         }
         setCaretOnEnd(battleTextArea);
-
+        return result;
     }
 
     @Override
@@ -83,7 +85,7 @@ public class Battle implements Runnable {
 
     private String getAttack() {
         if (successAttack(mainCreature, enemy))
-            return mainCreature.getName() + " attack " + enemy.getName() + " on " + mainCreature.getDamage();
+            return mainCreature.getName() + " attack " + enemy.getName() + " on " + String.format("%.2f",mainCreature.getDamage());
         else return mainCreature.getName() + " fault attack " + enemy.getName();
     }
 

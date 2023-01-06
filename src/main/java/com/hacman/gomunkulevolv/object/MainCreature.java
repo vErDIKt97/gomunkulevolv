@@ -4,35 +4,47 @@ import com.hacman.gomunkulevolv.abilities.Ability;
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
 import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 
+import java.util.Random;
+
 public class MainCreature extends Creature implements PlayableCharacter {
     private int exp;
     private int lvlGate;
     private int skillPoint;
+    private final double modifyDamage = new Random().nextDouble(-5, 5);
+    private final double modifyHealth = new Random().nextDouble(-20,20);
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final double levelModify = 1;
-
-    public double getLevelModify() {
-        return this.levelModify;
+    public MainCreature(MainCreature mainCreature) {
+        super(mainCreature);
+        this.exp = mainCreature.getExp();
+        this.lvlGate = mainCreature.getLvlGate();
+        this.skillPoint = mainCreature.getSkillPoint();
     }
 
     public MainCreature(int level, String name) {
         super(level, name);
-        float stronger = (float) 3;
-        this.setDamage((int) (this.getDamage() * stronger/2));
-        this.setMaxHealth((int) (this.getCurHealth() * stronger));
+        Random random = new Random();
+        this.setDamage(getDamageOnFormulaDamage());
+        this.setMaxHealth(getHealthOnFormulaHealth());
         this.setCurHealth(this.getMaxHealth());
         this.exp = 0;
-        this.lvlGate = level * 100;
+        this.lvlGate = level * 50;
         this.skillPoint = 1;
     }
+
+    private double getModifyDamage() {
+        return modifyDamage;
+    }
+
+    private double getModifyHealth() {
+        return  modifyHealth;
+    }
+
 
     @Override
     public String toString() {
         return super.toString() + "\n Exp: " + this.exp + "\\" + this.lvlGate;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public MainCreature getCreature() {
         return this;
@@ -53,10 +65,17 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private void lvlUp() {
         this.setLevel(this.getLevel() + 1);
         this.setLvlGate(this.getLvlGate() * 2);
-        this.setDamage((int) (this.getDamage() * getLevelModify()));
-        this.setMaxHealth((int) (this.getMaxHealth() * getLevelModify()));
-        this.setCurHealth((int) (this.getCurHealth() * getLevelModify()));
+        this.setDamage(getDamageOnFormulaDamage());
+        this.setMaxHealth(getHealthOnFormulaHealth());
         this.addSkillPoint();
+    }
+
+    private double getHealthOnFormulaHealth() {
+        return Math.pow(this.getLevel() + 10, 2) + 100 + getModifyHealth();
+    }
+
+    private double getDamageOnFormulaDamage() {
+        return ((2.0 / 25.0) * Math.pow(this.getLevel() + 15, 2)) + getModifyDamage();
     }
 
     @Override
@@ -108,5 +127,9 @@ public class MainCreature extends Creature implements PlayableCharacter {
     @Override
     public int getSkillPoint() {
         return skillPoint;
+    }
+
+    public MainCreature getCopy() {
+        return new MainCreature(this);
     }
 }

@@ -1,6 +1,6 @@
 package com.hacman.gomunkulevolv.abilities;
 
-import com.hacman.gomunkulevolv.game.session.MainGomunkulEvolv;
+import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.Creature;
 
 public class ToxSkinAbility extends Ability{
@@ -12,7 +12,7 @@ public class ToxSkinAbility extends Ability{
 
     @Override
     public float onDefense(Creature enemy) {
-        MainGomunkulEvolv.executorService.submit(() -> intoxicateEnemy(enemy));
+        FightSession.executorService.submit(() -> intoxicateEnemy(enemy));
         return super.onDefense(enemy);
     }
 

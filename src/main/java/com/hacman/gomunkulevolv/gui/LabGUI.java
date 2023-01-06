@@ -103,11 +103,12 @@ public class LabGUI {
     }
 
     private void refreshMainWindow() {
-        countLabGensLabel.setText(String.valueOf(labSession.getGensCount()));
         if (labSession.getCurFightSession()!=null) {
             labSession.refreshMainCreature();
+            labSession.getGensFromCurFightSession();
             labSession.clearCurFightSession();
         }
+        countLabGensLabel.setText(String.valueOf(labSession.getGensCount()));
         mainCharText.setText(labSession.getMainCreature().toString());
     }
 

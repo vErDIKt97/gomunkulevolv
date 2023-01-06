@@ -85,7 +85,7 @@ public class Battle implements Runnable {
 
     private String getAttack() {
         if (successAttack(mainCreature, enemy))
-            return mainCreature.getName() + " attack " + enemy.getName() + " on " + mainCreature.getDamage();
+            return mainCreature.getName() + " attack " + enemy.getName() + " on " + String.format("%.2f",mainCreature.getDamage());
         else return mainCreature.getName() + " fault attack " + enemy.getName();
     }
 

@@ -3,6 +3,7 @@ package com.hacman.gomunkulevolv.object;
 import com.hacman.gomunkulevolv.abilities.Ability;
 import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
 import com.hacman.gomunkulevolv.abilities.PossibleAbility;
+import com.hacman.gomunkulevolv.service.GameService;
 
 import java.util.Random;
 
@@ -43,7 +44,9 @@ public class MainCreature extends Creature implements PlayableCharacter {
 
     @Override
     public String toString() {
-        return super.toString() + "\n Exp: " + this.exp + "\\" + this.lvlGate;
+        return super.toString()
+                + "\n Exp: " + GameService.getFormatDouble(this.exp)
+                + "\\" + GameService.getFormatDouble(this.lvlGate);
     }
 
     @Override
@@ -84,7 +87,6 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.skillPoint++;
     }
 
-    @SuppressWarnings("unused")
     @Override
     public void spendSkillPoint(String title) {
         this.skillPoint--;

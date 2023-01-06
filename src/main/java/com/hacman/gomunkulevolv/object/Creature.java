@@ -2,6 +2,7 @@ package com.hacman.gomunkulevolv.object;
 
 import com.hacman.gomunkulevolv.abilities.Ability;
 import com.hacman.gomunkulevolv.abilities.PossibleAbility;
+import com.hacman.gomunkulevolv.service.GameService;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -61,15 +62,15 @@ public class Creature {
         String creature;
         String health;
         if (this.isAlive()) {
-            health = "\n Health: " + getFormatDouble(this.curHealth);
+            health = "\n Health: " + GameService.getFormatDouble(this.curHealth);
         } else {
             health = "\n Health: " + "DEAD";
         }
         creature = "Name: " + this.name +
                 "\n LvL: " + this.level +
                 health +
-                "\\" + getFormatDouble(maxHealth) +
-                "\n Attack: " + getFormatDouble(damage) +
+                "\\" + GameService.getFormatDouble(maxHealth) +
+                "\n Attack: " + GameService.getFormatDouble(damage) +
                 "\n Attack Speed:" + this.atkSpeed +
                 "\n Alive: " + this.isAlive() +
                 "\n Ability: " + this.currentAbilityList.values();
@@ -77,9 +78,7 @@ public class Creature {
 
     }
 
-    private String getFormatDouble(Double i) {
-        return String.format("%.2f", i);
-    }
+
 
     public double getMaxHealth() {
         return maxHealth;

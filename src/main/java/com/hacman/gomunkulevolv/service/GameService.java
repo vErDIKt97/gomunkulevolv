@@ -19,4 +19,8 @@ public class GameService {
         return result;
     }
 
+    public static String getFormatDouble(Double i) {
+        return String.format("%.2f", i);
+    }
+
 }

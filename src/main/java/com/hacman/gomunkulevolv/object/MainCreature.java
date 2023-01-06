@@ -7,22 +7,23 @@ import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 import java.util.Random;
 
 public class MainCreature extends Creature implements PlayableCharacter {
-    private int exp;
-    private int lvlGate;
+    private double exp;
+    private double expRatio = 1;
+    private double lvlGate;
     private int skillPoint;
     private final double modifyDamage = new Random().nextDouble(-5, 5);
-    private final double modifyHealth = new Random().nextDouble(-20,20);
+    private final double modifyHealth = new Random().nextDouble(-20, 20);
 
     public MainCreature(MainCreature mainCreature) {
         super(mainCreature);
         this.exp = mainCreature.getExp();
         this.lvlGate = mainCreature.getLvlGate();
         this.skillPoint = mainCreature.getSkillPoint();
+        this.expRatio = mainCreature.getExpRatio();
     }
 
     public MainCreature(int level, String name) {
         super(level, name);
-        Random random = new Random();
         this.setDamage(getDamageOnFormulaDamage());
         this.setMaxHealth(getHealthOnFormulaHealth());
         this.setCurHealth(this.getMaxHealth());
@@ -36,7 +37,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     }
 
     private double getModifyHealth() {
-        return  modifyHealth;
+        return modifyHealth;
     }
 
 
@@ -50,11 +51,11 @@ public class MainCreature extends Creature implements PlayableCharacter {
         return this;
     }
 
-    public int getExp() {
+    public double getExp() {
         return exp;
     }
 
-    public void setExp(int exp) {
+    public void setExp(double exp) {
         this.exp = exp;
         while (this.lvlGate <= exp) {
             this.setExp(this.getExp() - this.lvlGate);
@@ -107,19 +108,19 @@ public class MainCreature extends Creature implements PlayableCharacter {
     }
 
     @Override
-    public int getLvlGate() {
+    public double getLvlGate() {
         return lvlGate;
     }
 
     @Override
-    public void setLvlGate(int lvlGate) {
+    public void setLvlGate(double lvlGate) {
         this.lvlGate = lvlGate;
     }
 
     @SuppressWarnings("unused")
     @Override
     public void defEnemy(Creature enemy) {
-        int formulaExp = this.getExp() + enemy.getLevel() * 20;
+        double formulaExp = this.getExp() + enemy.getLevel() * 20 * getExpRatio();
         this.setExp(formulaExp);
     }
 
@@ -131,5 +132,13 @@ public class MainCreature extends Creature implements PlayableCharacter {
 
     public MainCreature getCopy() {
         return new MainCreature(this);
+    }
+
+    public double getExpRatio() {
+        return expRatio;
+    }
+
+    public void setExpRatio(double expRatio) {
+        this.expRatio = expRatio;
     }
 }

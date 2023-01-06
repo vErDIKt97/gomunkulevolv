@@ -7,13 +7,13 @@ import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public interface PlayableCharacter {
-    int getExp();
+    double getExp();
 
-    void setExp(int exp);
+    void setExp(double exp);
 
-    int getLvlGate();
+    double getLvlGate();
 
-    void setLvlGate(int lvlGate);
+    void setLvlGate(double lvlGate);
 
     int getSkillPoint();
 

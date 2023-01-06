@@ -14,9 +14,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class FightSession{
-
-    @SuppressWarnings("unused")
+public class FightSession {
     public static boolean sessionOver;
     public static final ExecutorService executorService = Executors.newCachedThreadPool();
     private Creature curEnemy;
@@ -81,7 +79,7 @@ public class FightSession{
             Battle.setBattleEnd(true);
             Platform.runLater(() -> {
                 boolean win = Battle.checkWin(mainCreature, curEnemy, battleTextArea);
-                battleResult(win,curEnemy, fightButton , levelUpButton);
+                battleResult(win, curEnemy, fightButton, levelUpButton);
                 refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
             });
             refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);

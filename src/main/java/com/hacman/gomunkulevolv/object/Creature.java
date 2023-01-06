@@ -43,14 +43,21 @@ public class Creature {
 
     public Creature(int level, String name) {
         this.level = level;
-        Random random = new Random();
-        this.damage = Math.pow(2 * this.level + 5, 2) / 9 + 5 + random.nextDouble(-5,5);
-        this.curHealth = Math.pow(3 * this.level + 8, 2) + 10 + random.nextDouble(-20,20);
+        this.damage = getDamageOnFormula();
+        this.curHealth = getCurHealthOnFormula();
         this.maxHealth = curHealth;
-        this.atkSpeed = random.nextLong(75, 100) * 10;
+        this.atkSpeed = new Random().nextLong(75, 100) * 10;
         this.currentAbilityList = new HashMap<>();
         this.name = name;
         this.alive = true;
+    }
+
+    private double getCurHealthOnFormula() {
+        return Math.pow(3 * this.level + 8, 2) + 10 + new Random().nextDouble(-20, 20);
+    }
+
+    private double getDamageOnFormula() {
+        return Math.pow(2 * this.level + 5, 2) / 9 + 5 + new Random().nextDouble(-5, 5);
     }
 
     double getLevelModify() {

@@ -57,7 +57,7 @@ public class Creature {
     }
 
     private double getDamageOnFormula() {
-        return Math.pow(2 * this.level + 5, 2) / 9 + 5 + new Random().nextDouble(-5, 5);
+        return Math.pow(2 * this.level + 5, 2) / 9 + 3 + new Random().nextDouble(-5, 5);
     }
 
     double getLevelModify() {
@@ -100,7 +100,7 @@ public class Creature {
     }
 
     public void setCurHealth(double curHealth) {
-        this.curHealth = Math.min((curHealth), this.maxHealth);
+        this.curHealth = curHealth;
     }
 
     public double getDamage() {
@@ -222,6 +222,6 @@ public class Creature {
     }
 
     public void restoreHealth(double restoredHealth) {
-        curHealth +=restoredHealth;
+        this.curHealth = Math.min((this.curHealth + restoredHealth), this.maxHealth);
     }
 }

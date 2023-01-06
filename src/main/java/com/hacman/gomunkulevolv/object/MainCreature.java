@@ -13,7 +13,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private double lvlGate;
     private int skillPoint;
     private final double modifyDamage = new Random().nextDouble(-5, 5);
-    private final double modifyHealth = new Random().nextDouble(-20, 20);
+    private final double modifyHealth = new Random().nextDouble(-20, 20) + 50;
 
     public MainCreature(MainCreature mainCreature) {
         super(mainCreature);
@@ -30,7 +30,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.setCurHealth(this.getMaxHealth());
         this.exp = 0;
         this.lvlGate = level * 50;
-        this.skillPoint = 1;
+        this.skillPoint = 0;
     }
 
     private double getModifyDamage() {
@@ -71,6 +71,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.setLvlGate(this.getLvlGate() * 2);
         this.setDamage(getDamageOnFormulaDamage());
         this.setMaxHealth(getHealthOnFormulaHealth());
+        this.restoreHealth(this.getMaxHealth());
         this.addSkillPoint();
     }
 

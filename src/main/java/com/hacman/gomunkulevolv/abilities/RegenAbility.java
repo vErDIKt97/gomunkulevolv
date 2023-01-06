@@ -21,7 +21,7 @@ public class RegenAbility extends Ability {
     @SuppressWarnings("BusyWait")
     public void regeneration() {
         while (mainCreature.isInBattle()) {
-            mainCreature.setCurHealth(mainCreature.getCurHealth() + regenPerSecond);
+            mainCreature.restoreHealth(regenPerSecond);
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

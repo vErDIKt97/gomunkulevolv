@@ -214,4 +214,8 @@ public class Creature {
                 ability.onStartBattle(creature);
             }
     }
+
+    public void restoreHealth(double restoredHealth) {
+        curHealth +=restoredHealth;
+    }
 }

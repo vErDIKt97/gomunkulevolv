@@ -16,10 +16,7 @@ public class VampireAbility extends Ability{
     }
 
     private void restoreHealthByVampiring(Creature creature) {
-        double curHealth = creature.getCurHealth();
-        double damage = creature.getDamage();
-        double restoredHealth = curHealth + damage * vampireRate;
-        creature.setCurHealth((int) restoredHealth);
+        creature.restoreHealth(creature.getDamage()*vampireRate);
     }
 
 }

@@ -124,7 +124,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
 
     @SuppressWarnings("unused")
     @Override
-    public void defEnemy(Creature enemy) {
+    public void learnFromEnemy(Creature enemy) {
         double formulaExp = this.getExp() + enemy.getLevel() * 20 * getExpRatio();
         this.setExp(formulaExp);
     }
@@ -155,4 +155,17 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.abModifyDamage = abModifyDamage;
         this.setDamage(this.getDamageOnFormulaDamage());
     }
+
+    public void devourEnemy(Creature creature) {
+        learnFromEnemy(creature);
+        this.restoreHealth(creature.getMaxHealth() * 0.1);
+    }
+
+    @Override
+    public int getGensForConsume(Creature creature) {
+        learnFromEnemy(creature);
+        return creature.getLevel()*10;
+
+    }
+
 }

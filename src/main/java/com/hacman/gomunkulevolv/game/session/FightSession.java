@@ -4,7 +4,10 @@ import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
 import com.hacman.gomunkulevolv.controller.Battle;
 import com.hacman.gomunkulevolv.controller.EnemyCreator;
 import com.hacman.gomunkulevolv.object.Creature;
+import com.hacman.gomunkulevolv.service.GameService;
 import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
@@ -91,7 +94,7 @@ public class FightSession {
 
     private void battleResult(boolean win, Creature enemy, Button fightButton, Button levelUpButton) {
         if (win) {
-            this.earnedGens += enemy.getLevel() * 10;
+            fightButton.fireEvent(new GameService.MyEvent());
         } else {
             fightButton.setVisible(false);
             levelUpButton.setVisible(false);
@@ -119,5 +122,9 @@ public class FightSession {
         }
         progress++;
         enemyCreator.refreshListEnemy(enemyCreatureList, enemyLevel, enemyText1);
+    }
+
+    public void addEarnedGens (int earnedGens) {
+        this.earnedGens +=earnedGens;
     }
 }

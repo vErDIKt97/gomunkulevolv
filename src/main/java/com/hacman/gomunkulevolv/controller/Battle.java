@@ -41,7 +41,6 @@ public class Battle implements Runnable {
         boolean result = false;
         if (mainCreature.getCreature().isAlive()) {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), mainCreature.getCreature().getName() + " WIN!"));
-            mainCreature.defEnemy(enemy);
             result = true;
         } else {
             battleTextArea.setText(addBattleLine(battleTextArea.getText(), "YOU LOSE!"));

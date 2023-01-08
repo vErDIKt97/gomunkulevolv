@@ -6,6 +6,7 @@ import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.MainCreature;
 import com.hacman.gomunkulevolv.service.GameService;
 import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -18,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
@@ -61,6 +63,7 @@ public class FightSessionGUI {
     private Button buttonReturn;
     private Label labelGens;
     private Text textGens;
+    private Stage defEnemyStage;
 
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
@@ -83,16 +86,19 @@ public class FightSessionGUI {
         GridPane.setHgrow(enemy5, Priority.ALWAYS);
         stage.show();
         mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
+        createDefEnemyWindow(stage);
     }
 
     private void createObjects(Stage stage) {
         CreateMainWindow(stage);
-        CreateLvlUpWindow();
+        CreateLvlUpWindow(stage);
     }
 
-    private void CreateLvlUpWindow() {
+    private void CreateLvlUpWindow(Stage stage) {
         buttonLevelUp = new Button("+");
         lvlUpWindow = new Stage();
+        lvlUpWindow.initModality(Modality.WINDOW_MODAL);
+        lvlUpWindow.initOwner(stage);
         lvlUpBorderPane = new BorderPane();
         lvlUpScene = new Scene(lvlUpBorderPane);
         lvlUpWindow.setTitle("Ability's");
@@ -129,8 +135,39 @@ public class FightSessionGUI {
         textGens = new Text();
         buttonFightNext.setText("Fight next!");
         buttonReturn.setText("Return in Lab");
+        mainScene.addEventHandler(WindowEvent.WINDOW_SHOWING,windowEvent -> refreshTextMainCreature());
         stage.setScene(mainScene);
         stage.setTitle("GomunkulEvolv");
+    }
+
+    private void createDefEnemyWindow (Stage stage) {
+        defEnemyStage = new Stage();
+        defEnemyStage.initModality(Modality.WINDOW_MODAL);
+        defEnemyStage.initOwner(stage.getScene().getWindow());
+        HBox defEnemyHBox = new HBox();
+        Button devourButton = new Button("Devour");
+        devourButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getDevourEnemy);
+        Button consumeButton = new Button("Consume");
+        consumeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getAddEarnedGens);
+        defEnemyHBox.getChildren().add(devourButton);
+        defEnemyHBox.getChildren().add(consumeButton);
+        defEnemyStage.setScene(new Scene(defEnemyHBox));
+    }
+
+    private void getAddEarnedGens(Event event) {
+        fightSession.addEarnedGens(fightSession.getMainCreature().getGensForConsume(fightSession.getEnemyCreatureList().get(0)));
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+        refreshTextMainCreature();
+    }
+
+    private void getDevourEnemy(Event event) {
+        fightSession.getMainCreature().devourEnemy(fightSession.getEnemyCreatureList().get(0));
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+        refreshTextMainCreature();
+    }
+
+    private void refreshTextMainCreature() {
+        mainCharText.setText(fightSession.getMainCreature().toString());
     }
 
     private void addChildrenMainPane(Stage stage) {
@@ -145,6 +182,7 @@ public class FightSessionGUI {
                 buttonFightNext,
                 buttonLevelUp,
                 textGens));
+        buttonFightNext.addEventHandler(GameService.MyEvent.DEFEAT_ENEMY, event -> enemyDefeat(event));
         buttonLevelUp.addEventHandler(MouseEvent.MOUSE_CLICKED, this::lvlUpClick);
         buttonReturn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::returnOnPrevWindow);
         enemy1.getChildren().add(enemyText1);
@@ -184,9 +222,12 @@ public class FightSessionGUI {
         fillAbilityPane(abilityGridPane, fightSession);
     }
 
+    private void enemyDefeat(Event event) {
+        defEnemyStage.show();
+    }
+
     private void lvlUpClick(MouseEvent mouseEvent) {
         lvlUpWindow.show();
-        ((Node) (mouseEvent.getSource())).getScene().getWindow().hide();
         refreshAbilityAvailable();
     }
 
@@ -201,8 +242,12 @@ public class FightSessionGUI {
         //lvlUpWindow
         lvlUpBorderPane.setCenter(abilityGridPane);
         lvlUpWindow.setScene(lvlUpScene);
-        lvlUpScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> stage.show());
+        lvlUpScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> onCloseAbWindow(stage));
         lvlUpBorderPane.setRight(lvlUpInformPanel);
+    }
+
+    private void onCloseAbWindow(Stage stage) {
+        stage.show();
     }
 
     private void refreshAbilityAvailable() {
@@ -235,6 +280,7 @@ public class FightSessionGUI {
     private void abilityClick(FightSession fightSession, String title) {
         fightSession.getMainCreature().spendSkillPoint(title);
         refreshLvlUpAbilityPane(fightSession);
+        refreshTextMainCreature();
     }
 
     private void fillAbilityPane(GridPane abilityGridPane, FightSession fightSession) {

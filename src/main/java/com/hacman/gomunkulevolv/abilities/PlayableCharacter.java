@@ -19,7 +19,7 @@ public interface PlayableCharacter {
 
     void addSkillPoint();
 
-    void defEnemy(Creature enemy);
+    void learnFromEnemy(Creature enemy);
 
     String toString();
 
@@ -28,4 +28,8 @@ public interface PlayableCharacter {
     void spendSkillPoint(String title);
 
     HashMap<PossibleAbility, Ability> getCurrentAbilityList();
+
+    void devourEnemy(Creature creature);
+
+    int getGensForConsume(Creature creature);
 }

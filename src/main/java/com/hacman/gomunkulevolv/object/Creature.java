@@ -14,7 +14,6 @@ public class Creature {
     private double maxHealth;
     private double damage;
     private static HashMap<PossibleAbility, Ability> possibleAbilityList;
-    public static final int possibleAbilityCount = 5;
     private final HashMap<PossibleAbility, Ability> currentAbilityList;
     private int level;
     private final String name;

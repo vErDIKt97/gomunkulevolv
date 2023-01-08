@@ -1,6 +1,5 @@
 package com.hacman.gomunkulevolv.game.lab.ability;
 
-import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.object.MainCreature;
 
 public abstract class LabAbility {

@@ -7,6 +7,8 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -57,6 +59,8 @@ public class LabGUI {
     private void createMainWindowObjects(Stage stage) {
         mainBorderPane = new BorderPane();
         labBox = new HBox();
+        Image mainCharImage = new Image(String.valueOf(getClass().getClassLoader().getResource("slime.png")));
+        labBox.getChildren().add(new ImageView(mainCharImage));
         mainCharText = new Text();
         centreLabPointsPane = new HBox();
         labPointsLabel = new Label("Total gen's: ");
@@ -68,6 +72,7 @@ public class LabGUI {
         mainScene = new Scene(mainBorderPane);
         stage.setScene(mainScene);
         stage.setTitle("Game");
+//        stage.initStyle(StageStyle.TRANSPARENT);
     }
 
     private void createLabAbilityWindow() {
@@ -103,7 +108,7 @@ public class LabGUI {
     }
 
     private void refreshMainWindow() {
-        if (labSession.getCurFightSession()!=null) {
+        if (labSession.getCurFightSession() != null) {
             labSession.refreshMainCreature();
             labSession.getGensFromCurFightSession();
             labSession.clearCurFightSession();

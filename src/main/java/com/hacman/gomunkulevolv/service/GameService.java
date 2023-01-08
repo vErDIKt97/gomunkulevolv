@@ -28,10 +28,14 @@ public class GameService {
     public static class MyEvent extends Event {
 
         public static final EventType<MyEvent> DEFEAT_ENEMY = new EventType<>(Event.ANY, "DEFEAT_ENEMY");
-        public MyEvent() {
-            super(DEFEAT_ENEMY);
+        public static final EventType<MyEvent> MAIN_CREATURE_ATTACK = new EventType<>(ANY, "MAIN_CREATURE_ATTACK");
+
+        @SuppressWarnings("unchecked")
+        public MyEvent(EventType eventType) {
+            super(eventType);
         }
 
+        @SuppressWarnings("unchecked")
         @Override
         public EventType<? extends MyEvent> getEventType() {
             return (EventType<? extends MyEvent>) super.getEventType();

@@ -8,7 +8,6 @@ import com.hacman.gomunkulevolv.service.GameService;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
@@ -71,6 +70,8 @@ public class FightSessionGUI {
     private Stage defEnemyStage;
     private ImageView mainCharImage;
     private Timeline mainCharAttack;
+    private ImageView enemyCharImage;
+    private Timeline enemyCharAttack;
 
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
@@ -93,11 +94,16 @@ public class FightSessionGUI {
         GridPane.setHgrow(enemy5, Priority.ALWAYS);
         stage.show();
         mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
-        battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlay());
+        battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlayMainAttack());
+        battleTextArea.addEventHandler(GameService.MyEvent.ENEMY_CREATURE_ATTACK, myEvent -> getPlayEnemyAttack());
         createDefEnemyWindow(stage);
     }
 
-    private void getPlay() {
+    private void getPlayEnemyAttack() {
+        enemyCharAttack.play();
+    }
+
+    private void getPlayMainAttack() {
         mainCharAttack.play();
     }
 
@@ -151,20 +157,37 @@ public class FightSessionGUI {
         stage.setScene(mainScene);
         stage.setTitle("GomunkulEvolv");
         createMainCharImage();
+        createEnemyCharImage();
+    }
+
+    private void createEnemyCharImage() {
+        Image stateEnemyCharImage = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageState.png")));
+        enemyCharImage = new ImageView(stateEnemyCharImage);
+        Image[] attack = new Image[4];
+        for (int i = 0; i < 4; i++) {
+            attack[i] = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageAttack" + (i+1) + ".png")));
+        }
+        enemyCharAttack = new Timeline();
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> enemyCharImage.setImage(attack[0])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> enemyCharImage.setImage(attack[1])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> enemyCharImage.setImage(attack[2])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> enemyCharImage.setImage(attack[3])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> enemyCharImage.setImage(stateEnemyCharImage)));
+
     }
 
     private void createMainCharImage() {
-        Image stateMainCharImage = new Image(String.valueOf(getClass().getClassLoader().getResource("slime.png")));
+        Image stateMainCharImage = new Image(String.valueOf(getClass().getResource("/MainChar/slime.png")));
         mainCharImage = new ImageView(stateMainCharImage);
-        Image mainCharImageAttack1 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack1.png")));
-        Image mainCharImageAttack2 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack2.png")));
-        Image mainCharImageAttack3 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack3.png")));
-        Image mainCharImageAttack4 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack4.png")));
+        Image[] attack = new Image[4];
+        for (int i = 0; i < 4; i++) {
+            attack[i] = new Image(String.valueOf(getClass().getResource("/MainChar/slimeAttack" + (i+1) + ".png")));
+        }
         mainCharAttack = new Timeline();
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> mainCharImage.setImage(mainCharImageAttack1)));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> mainCharImage.setImage(mainCharImageAttack2)));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> mainCharImage.setImage(mainCharImageAttack3)));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> mainCharImage.setImage(mainCharImageAttack4)));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> mainCharImage.setImage(attack[0])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> mainCharImage.setImage(attack[1])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> mainCharImage.setImage(attack[2])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> mainCharImage.setImage(attack[3])));
         mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> mainCharImage.setImage(stateMainCharImage)));
     }
 
@@ -204,6 +227,7 @@ public class FightSessionGUI {
 
         mainCharPane.add(mainCharText, 1, 0);
         mainCharPane.add(mainCharImage,0,0);
+        enemyCharPane.add(enemyCharImage,1,0);
         enemyCharPane.add(enemyCharText, 0, 0);
         buttonFightNext.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> fightSession.fight(mainCharText,
                 enemyCharText,

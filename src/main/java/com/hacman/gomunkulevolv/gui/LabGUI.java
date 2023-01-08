@@ -59,7 +59,7 @@ public class LabGUI {
     private void createMainWindowObjects(Stage stage) {
         mainBorderPane = new BorderPane();
         labBox = new HBox();
-        Image mainCharImage = new Image(String.valueOf(getClass().getClassLoader().getResource("slime.png")));
+        Image mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
         labBox.getChildren().add(new ImageView(mainCharImage));
         mainCharText = new Text();
         centreLabPointsPane = new HBox();

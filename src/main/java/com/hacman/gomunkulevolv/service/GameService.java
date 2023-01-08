@@ -29,6 +29,7 @@ public class GameService {
 
         public static final EventType<MyEvent> DEFEAT_ENEMY = new EventType<>(Event.ANY, "DEFEAT_ENEMY");
         public static final EventType<MyEvent> MAIN_CREATURE_ATTACK = new EventType<>(ANY, "MAIN_CREATURE_ATTACK");
+        public static final EventType<MyEvent> ENEMY_CREATURE_ATTACK = new EventType<>(ANY, "ENEMY_CREATURE_ATTACK");
 
         @SuppressWarnings("unchecked")
         public MyEvent(EventType eventType) {

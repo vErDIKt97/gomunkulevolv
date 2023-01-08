@@ -5,6 +5,8 @@ import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.MainCreature;
 import com.hacman.gomunkulevolv.service.GameService;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.geometry.Insets;
@@ -15,6 +17,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
@@ -22,6 +26,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -64,6 +69,8 @@ public class FightSessionGUI {
     private Label labelGens;
     private Text textGens;
     private Stage defEnemyStage;
+    private ImageView mainCharImage;
+    private Timeline mainCharAttack;
 
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
@@ -86,7 +93,12 @@ public class FightSessionGUI {
         GridPane.setHgrow(enemy5, Priority.ALWAYS);
         stage.show();
         mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
+        battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlay());
         createDefEnemyWindow(stage);
+    }
+
+    private void getPlay() {
+        mainCharAttack.play();
     }
 
     private void createObjects(Stage stage) {
@@ -135,12 +147,28 @@ public class FightSessionGUI {
         textGens = new Text();
         buttonFightNext.setText("Fight next!");
         buttonReturn.setText("Return in Lab");
-        mainScene.addEventHandler(WindowEvent.WINDOW_SHOWING,windowEvent -> refreshTextMainCreature());
+        mainScene.addEventHandler(WindowEvent.WINDOW_SHOWING, windowEvent -> refreshTextMainCreature());
         stage.setScene(mainScene);
         stage.setTitle("GomunkulEvolv");
+        createMainCharImage();
     }
 
-    private void createDefEnemyWindow (Stage stage) {
+    private void createMainCharImage() {
+        Image stateMainCharImage = new Image(String.valueOf(getClass().getClassLoader().getResource("slime.png")));
+        mainCharImage = new ImageView(stateMainCharImage);
+        Image mainCharImageAttack1 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack1.png")));
+        Image mainCharImageAttack2 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack2.png")));
+        Image mainCharImageAttack3 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack3.png")));
+        Image mainCharImageAttack4 = new Image(String.valueOf(getClass().getClassLoader().getResource("slimeAttack4.png")));
+        mainCharAttack = new Timeline();
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> mainCharImage.setImage(mainCharImageAttack1)));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> mainCharImage.setImage(mainCharImageAttack2)));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> mainCharImage.setImage(mainCharImageAttack3)));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> mainCharImage.setImage(mainCharImageAttack4)));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> mainCharImage.setImage(stateMainCharImage)));
+    }
+
+    private void createDefEnemyWindow(Stage stage) {
         defEnemyStage = new Stage();
         defEnemyStage.initModality(Modality.WINDOW_MODAL);
         defEnemyStage.initOwner(stage.getScene().getWindow());
@@ -157,6 +185,7 @@ public class FightSessionGUI {
     private void getAddEarnedGens(Event event) {
         fightSession.addEarnedGens(fightSession.getMainCreature().getGensForConsume(fightSession.getEnemyCreatureList().get(0)));
         ((Node) (event.getSource())).getScene().getWindow().hide();
+        textGens.setText(String.valueOf(fightSession.getEarnedGens()));
         refreshTextMainCreature();
     }
 
@@ -172,7 +201,9 @@ public class FightSessionGUI {
 
     private void addChildrenMainPane(Stage stage) {
         // MainWindow
-        mainCharPane.add(mainCharText, 0, 0);
+
+        mainCharPane.add(mainCharText, 1, 0);
+        mainCharPane.add(mainCharImage,0,0);
         enemyCharPane.add(enemyCharText, 0, 0);
         buttonFightNext.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> fightSession.fight(mainCharText,
                 enemyCharText,
@@ -182,8 +213,8 @@ public class FightSessionGUI {
                 buttonFightNext,
                 buttonLevelUp,
                 textGens));
-        buttonFightNext.addEventHandler(GameService.MyEvent.DEFEAT_ENEMY, event -> enemyDefeat(event));
-        buttonLevelUp.addEventHandler(MouseEvent.MOUSE_CLICKED, this::lvlUpClick);
+        buttonFightNext.addEventHandler(GameService.MyEvent.DEFEAT_ENEMY, event -> enemyDefeat());
+        buttonLevelUp.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> lvlUpClick());
         buttonReturn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::returnOnPrevWindow);
         enemy1.getChildren().add(enemyText1);
         enemy2.getChildren().add(enemyText2);
@@ -222,11 +253,11 @@ public class FightSessionGUI {
         fillAbilityPane(abilityGridPane, fightSession);
     }
 
-    private void enemyDefeat(Event event) {
+    private void enemyDefeat() {
         defEnemyStage.show();
     }
 
-    private void lvlUpClick(MouseEvent mouseEvent) {
+    private void lvlUpClick() {
         lvlUpWindow.show();
         refreshAbilityAvailable();
     }
@@ -298,6 +329,7 @@ public class FightSessionGUI {
             }
         }
     }
+
     public static @NotNull ArrayList<ArrayList<Ability>> getOrganizeAbilityList(FightSession fightSession) {
         ArrayList<ArrayList<Ability>> organizeAbilityList = new ArrayList<>();
         for (Map.Entry<PossibleAbility, Ability> entry : MainCreature.getPossibleAbilityList().entrySet()) {

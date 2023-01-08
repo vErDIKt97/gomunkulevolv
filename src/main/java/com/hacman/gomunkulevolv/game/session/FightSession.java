@@ -6,8 +6,6 @@ import com.hacman.gomunkulevolv.controller.EnemyCreator;
 import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.service.GameService;
 import javafx.application.Platform;
-import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.text.Text;
@@ -18,7 +16,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 public class FightSession {
-    public static boolean sessionOver;
     public static final ExecutorService executorService = Executors.newCachedThreadPool();
     private Creature curEnemy;
     private int enemyLevel = 1;
@@ -44,7 +41,6 @@ public class FightSession {
         enemyCreator = new EnemyCreator(enemies, enemyLevel, enemyText1);
         enemyCreatureList = enemyCreator.getCreatures();
         curEnemy = enemyCreatureList.get(0);
-        sessionOver = false;
     }
 
     public PlayableCharacter getMainCreature() {
@@ -81,8 +77,8 @@ public class FightSession {
             }
             Battle.setBattleEnd(true);
             Platform.runLater(() -> {
-                boolean win = Battle.checkWin(mainCreature, curEnemy, battleTextArea);
-                battleResult(win, curEnemy, fightButton, levelUpButton);
+                boolean win = Battle.checkWin(mainCreature, battleTextArea);
+                battleResult(win, fightButton, levelUpButton);
                 refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
             });
             refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
@@ -92,9 +88,9 @@ public class FightSession {
         }).start();
     }
 
-    private void battleResult(boolean win, Creature enemy, Button fightButton, Button levelUpButton) {
+    private void battleResult(boolean win, Button fightButton, Button levelUpButton) {
         if (win) {
-            fightButton.fireEvent(new GameService.MyEvent());
+            fightButton.fireEvent(new GameService.MyEvent(GameService.MyEvent.DEFEAT_ENEMY));
         } else {
             fightButton.setVisible(false);
             levelUpButton.setVisible(false);

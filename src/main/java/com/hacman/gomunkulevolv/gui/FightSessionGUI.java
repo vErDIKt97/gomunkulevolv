@@ -260,13 +260,13 @@ public class FightSessionGUI {
             while (organizeAbilityList.size() < ability.getClassAbility()) {
                 organizeAbilityList.add(new ArrayList<>());
             }
-            organizeAbilityList.get(ability.getClassAbility() - 1).add(ability);
             Ability abilityFromCur = fightSession.getMainCreature().getCurrentAbilityList().get(abilityName);
             if (abilityFromCur != null) {
                 if (ability.equals(abilityFromCur)) {
-                    ability.setAbilityLevel(abilityFromCur.getAbilityLevel());
+                    ability = abilityFromCur;
                 }
             }
+            organizeAbilityList.get(ability.getClassAbility() - 1).add(ability);
         }
         return organizeAbilityList;
     }

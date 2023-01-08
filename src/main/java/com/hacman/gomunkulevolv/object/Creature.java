@@ -13,7 +13,7 @@ public class Creature {
     private double curHealth;
     private double maxHealth;
     private double damage;
-    private static final HashMap<PossibleAbility, Ability> possibleAbilityList = new HashMap<>();
+    private static HashMap<PossibleAbility, Ability> possibleAbilityList;
     public static final int possibleAbilityCount = 5;
     private final HashMap<PossibleAbility, Ability> currentAbilityList;
     private int level;
@@ -191,9 +191,8 @@ public class Creature {
     }
 
     public static HashMap<PossibleAbility, Ability> getPossibleAbilityList() {
-        if (possibleAbilityList.size() < possibleAbilityCount - 1) {
-            fillDefaultPosAbList();
-        }
+        possibleAbilityList = new HashMap<>();
+        fillDefaultPosAbList();
         return possibleAbilityList;
     }
 

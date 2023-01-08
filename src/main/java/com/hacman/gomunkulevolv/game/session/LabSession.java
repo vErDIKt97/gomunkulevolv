@@ -59,8 +59,8 @@ public class LabSession {
 
     public void refreshMainCreature() {
         mainCreature = new MainCreature(1, "Hero");
-        appendAbilityModify();
         noModifyMainCreature = mainCreature;
+        appendAbilityModify();
     }
 
     public void appendAbilityModify() {

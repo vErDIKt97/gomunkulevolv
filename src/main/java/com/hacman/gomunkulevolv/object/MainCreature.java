@@ -12,8 +12,9 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private double expRatio = 1;
     private double lvlGate;
     private int skillPoint;
-    private final double modifyDamage = new Random().nextDouble(-5, 5);
-    private final double modifyHealth = new Random().nextDouble(-20, 20) + 50;
+    private final double randomModifyDamage = new Random().nextDouble(-5, 5);
+    private final double randomModifyHealth = new Random().nextDouble(-20, 20) + 50;
+    private double abModifyDamage = 0;
 
     public MainCreature(MainCreature mainCreature) {
         super(mainCreature);
@@ -21,6 +22,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.lvlGate = mainCreature.getLvlGate();
         this.skillPoint = mainCreature.getSkillPoint();
         this.expRatio = mainCreature.getExpRatio();
+        this.abModifyDamage = mainCreature.abModifyDamage;
     }
 
     public MainCreature(int level, String name) {
@@ -33,12 +35,12 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.skillPoint = 0;
     }
 
-    private double getModifyDamage() {
-        return modifyDamage;
+    private double getRandomModifyDamage() {
+        return randomModifyDamage;
     }
 
-    private double getModifyHealth() {
-        return modifyHealth;
+    private double getRandomModifyHealth() {
+        return randomModifyHealth;
     }
 
 
@@ -76,11 +78,11 @@ public class MainCreature extends Creature implements PlayableCharacter {
     }
 
     private double getHealthOnFormulaHealth() {
-        return Math.pow(this.getLevel() + 10, 2) + 100 + getModifyHealth();
+        return Math.pow(this.getLevel() + 10, 2) + 100 + getRandomModifyHealth();
     }
 
     private double getDamageOnFormulaDamage() {
-        return ((2.0 / 25.0) * Math.pow(this.getLevel() + 15, 2)) + getModifyDamage();
+        return ((2.0 / 25.0) * Math.pow(this.getLevel() + 15, 2)) + getRandomModifyDamage() + getAbModifyDamage();
     }
 
     @Override
@@ -143,5 +145,14 @@ public class MainCreature extends Creature implements PlayableCharacter {
 
     public void setExpRatio(double expRatio) {
         this.expRatio = expRatio;
+    }
+
+    public double getAbModifyDamage() {
+        return abModifyDamage;
+    }
+
+    public void setAbModifyDamage(double abModifyDamage) {
+        this.abModifyDamage = abModifyDamage;
+        this.setDamage(this.getDamageOnFormulaDamage());
     }
 }

@@ -1,6 +1,7 @@
 package com.hacman.gomunkulevolv.game.lab.ability;
 
 import com.hacman.gomunkulevolv.object.Creature;
+import com.hacman.gomunkulevolv.object.MainCreature;
 
 public abstract class LabAbility {
     private int levelLabAbility;
@@ -40,7 +41,7 @@ public abstract class LabAbility {
     }
 
     @SuppressWarnings({"unused", "EmptyMethod"})
-    public void modifyCreature(Creature creature) {
+    public void modifyCreature(MainCreature creature) {
     }
 
     @Override

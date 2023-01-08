@@ -20,6 +20,7 @@ public class LabSession {
     public LabSession() {
         mainCreature = new MainCreature(1,"Hero");
         noModifyMainCreature = mainCreature;
+        appendAbilityModify();
         fillPosLabAb();
     }
 
@@ -58,6 +59,7 @@ public class LabSession {
 
     public void refreshMainCreature() {
         mainCreature = new MainCreature(1, "Hero");
+        appendAbilityModify();
         noModifyMainCreature = mainCreature;
     }
 

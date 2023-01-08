@@ -1,6 +1,7 @@
 package com.hacman.gomunkulevolv.game.lab.ability;
 
 import com.hacman.gomunkulevolv.object.Creature;
+import com.hacman.gomunkulevolv.object.MainCreature;
 
 public class ModifyAttack extends LabAbility{
     private final LabAbilities id = LabAbilities.ATTACK;
@@ -17,8 +18,8 @@ public class ModifyAttack extends LabAbility{
 
     @SuppressWarnings("unused")
     @Override
-    public void modifyCreature(Creature creature) {
+    public void modifyCreature(MainCreature creature) {
         super.modifyCreature(creature);
-        creature.setDamage(creature.getDamage()+getLabAbilityLevel());
+        creature.setAbModifyDamage(getLabAbilityLevel());
     }
 }

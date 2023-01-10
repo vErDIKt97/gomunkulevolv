@@ -14,7 +14,6 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,7 +56,7 @@ public class FightSessionGUI {
     private Text enemyCharText;
     private GridPane mainCharPane;
     private GridPane enemyCharPane;
-    private HBox centre;
+    private StackPane centre;
     private Button buttonLevelUp;
     private Stage lvlUpWindow;
     private BorderPane lvlUpBorderPane;
@@ -65,13 +64,14 @@ public class FightSessionGUI {
     private VBox lvlUpInformPanel;
     private Scene mainScene;
     private Button buttonReturn;
-    private Label labelGens;
-    private Text textGens;
+    private String labelGens;
+    private String textGens = "0";
     private Stage defEnemyStage;
     private ImageView mainCharImage;
     private Timeline mainCharAttack;
     private ImageView enemyCharImage;
     private Timeline enemyCharAttack;
+    private Text containerGens;
 
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
@@ -127,7 +127,7 @@ public class FightSessionGUI {
         mainBorderPane = new BorderPane();
         topBorderPane = new BorderPane();
         buttonBox = new HBox();
-        centre = new HBox();
+        centre = new StackPane();
         battleTextArea = new TextArea();
         enemiesPane = new GridPane();
         enemy1 = new VBox();
@@ -149,8 +149,8 @@ public class FightSessionGUI {
         mainCharPane = new GridPane();
         enemyCharPane = new GridPane();
         abilityGridPane = new GridPane();
-        labelGens = new Label("Earned gens: ");
-        textGens = new Text();
+        labelGens = "Earned gens: ";
+        containerGens = new Text(labelGens + " " + textGens);
         buttonFightNext.setText("Fight next!");
         buttonReturn.setText("Return in Lab");
         mainScene.addEventHandler(WindowEvent.WINDOW_SHOWING, windowEvent -> refreshTextMainCreature());
@@ -208,7 +208,8 @@ public class FightSessionGUI {
     private void getAddEarnedGens(Event event) {
         fightSession.addEarnedGens(fightSession.getMainCreature().getGensForConsume(fightSession.getEnemyCreatureList().get(0)));
         ((Node) (event.getSource())).getScene().getWindow().hide();
-        textGens.setText(String.valueOf(fightSession.getEarnedGens()));
+        textGens = String.valueOf(fightSession.getEarnedGens());
+        containerGens.setText(labelGens + " " + textGens);
         refreshTextMainCreature();
     }
 
@@ -235,8 +236,8 @@ public class FightSessionGUI {
                 battleTextArea,
                 enemies,
                 buttonFightNext,
-                buttonLevelUp,
-                textGens));
+                buttonLevelUp
+        ));
         buttonFightNext.addEventHandler(GameService.MyEvent.DEFEAT_ENEMY, event -> enemyDefeat());
         buttonLevelUp.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> lvlUpClick());
         buttonReturn.addEventHandler(MouseEvent.MOUSE_CLICKED, this::returnOnPrevWindow);
@@ -257,12 +258,10 @@ public class FightSessionGUI {
         mainBorderPane.setTop(topBorderPane);
         mainBorderPane.setBottom(buttonBox);
         mainBorderPane.setCenter(battleTextArea);
-        mainBorderPane.setCenter(battleTextArea);
         buttonBox.getChildren().add(buttonFightNext);
         buttonBox.getChildren().add(buttonLevelUp);
         buttonBox.getChildren().add(buttonReturn);
-        centre.getChildren().add(labelGens);
-        centre.getChildren().add(textGens);
+        centre.getChildren().add(containerGens);
         enemies.add(enemyText1);
         enemies.add(enemyText2);
         enemies.add(enemyText3);
@@ -273,7 +272,7 @@ public class FightSessionGUI {
         fightSession.Init(enemies, enemyText1);
         mainCharText.setText(fightSession.getMainCreature().toString());
         enemyCharText.setText(fightSession.getEnemyCreatureList().get(0).toString());
-        textGens.setText(String.valueOf(fightSession.getEarnedGens()));
+        textGens = String.valueOf(fightSession.getEarnedGens());
         fillAbilityPane(abilityGridPane, fightSession);
     }
 

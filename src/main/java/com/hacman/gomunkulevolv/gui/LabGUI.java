@@ -51,9 +51,14 @@ public class LabGUI {
         createLabAbilityWindow();
         addMainWindowChildren(stage, labSession);
         addLabAbilityWindowChildren(stage, labSession);
+        stylishMainWindow();
         refreshMainWindow();
         stage.show();
         mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_SHOWING, windowEvent -> refreshMainWindow());
+    }
+
+    private void stylishMainWindow() {
+
     }
 
     private void createMainWindowObjects(Stage stage) {

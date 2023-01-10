@@ -59,8 +59,7 @@ public class FightSession {
                       TextArea battleTextArea,
                       ArrayList<Text> enemies,
                       Button fightButton,
-                      Button levelUpButton,
-                      Text textGens) {
+                      Button levelUpButton) {
         levelUpButton.setDisable(true);
         changeButtonAvailable(fightButton);
         battleTextArea.setText("");
@@ -73,15 +72,15 @@ public class FightSession {
         enemyCharThread = executorService.submit(enemyBattle);
         new Thread(() -> {
             while (mainCharThread.state() == Future.State.RUNNING && enemyCharThread.state() == Future.State.RUNNING) {
-                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
+                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             }
             Battle.setBattleEnd(true);
             Platform.runLater(() -> {
                 boolean win = Battle.checkWin(mainCreature, battleTextArea);
                 battleResult(win, fightButton, levelUpButton);
-                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
+                refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             });
-            refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1, textGens);
+            refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             refreshEnemyList(enemies, enemyText1);
             changeButtonAvailable(fightButton);
             changeButtonAvailable(levelUpButton);
@@ -105,11 +104,10 @@ public class FightSession {
                                              PlayableCharacter mainCreature,
                                              Text enemyCharText,
                                              Creature enemy,
-                                             Text enemyText1, Text textGens) {
+                                             Text enemyText1) {
         mainCharText.setText(mainCreature.toString());
         enemyCharText.setText(enemy.toString());
         enemyText1.setText(enemy.toString());
-        textGens.setText(String.valueOf(earnedGens));
     }
 
     private void refreshEnemyList(ArrayList<Text> enemyCreatureList, Text enemyText1) {

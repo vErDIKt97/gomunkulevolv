@@ -12,6 +12,8 @@ public class GomunkulEvolv extends Application {
     @Override
     public void start(Stage stage) {
 //        new FightSessionGUI(stage);
+        stage.setWidth(640);
+        stage.setHeight(480);
         new LabGUI(stage);
     }
 

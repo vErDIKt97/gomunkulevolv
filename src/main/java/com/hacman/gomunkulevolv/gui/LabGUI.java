@@ -3,6 +3,10 @@ package com.hacman.gomunkulevolv.gui;
 import com.hacman.gomunkulevolv.game.lab.ability.LabAbilities;
 import com.hacman.gomunkulevolv.game.lab.ability.LabAbility;
 import com.hacman.gomunkulevolv.game.session.LabSession;
+import javafx.geometry.HPos;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,10 +14,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -26,20 +27,20 @@ import java.util.Map;
 public class LabGUI {
     private LabSession labSession;
     private BorderPane mainBorderPane;
-    private HBox labBox;
+    private GridPane labBox;
     private Text mainCharText;
     private Label labPointsLabel;
-    private Label countLabGensLabel;
     private Button spendLabGensButton;
-    private VBox sessionBox;
+    private StackPane sessionBox;
     private Button newSessionButton;
-    private HBox centreLabPointsPane;
+    private StackPane centreLabPointsPane;
     private Stage abUpWindow;
     private BorderPane abUpBorderPane;
     private Scene abUpScene;
     private VBox abUpInformPanel;
     private GridPane labAbilityGridPane;
     private Scene mainScene;
+    private Image mainCharImage;
 
     public LabGUI(Stage stage) {
         buildGameWindow(stage);
@@ -48,7 +49,7 @@ public class LabGUI {
     private void buildGameWindow(Stage stage) {
         labSession = new LabSession();
         createMainWindowObjects(stage);
-        createLabAbilityWindow();
+        createLabAbilityWindow(stage);
         addMainWindowChildren(stage, labSession);
         addLabAbilityWindowChildren(stage, labSession);
         stylishMainWindow();
@@ -63,15 +64,13 @@ public class LabGUI {
 
     private void createMainWindowObjects(Stage stage) {
         mainBorderPane = new BorderPane();
-        labBox = new HBox();
-        Image mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
-        labBox.getChildren().add(new ImageView(mainCharImage));
+        labBox = new GridPane();
+        mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
         mainCharText = new Text();
-        centreLabPointsPane = new HBox();
-        labPointsLabel = new Label("Total gen's: ");
-        countLabGensLabel = new Label(String.valueOf(labSession.getGensCount()));
+        centreLabPointsPane = new StackPane();
+        labPointsLabel = new Label("Total gen's: " + labSession.getGensCount());
         spendLabGensButton = new Button("Spend gen's");
-        sessionBox = new VBox();
+        sessionBox = new StackPane();
         newSessionButton = new Button("Go to Battle!");
         newSessionButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> startNewSession(mouseEvent, stage));
         mainScene = new Scene(mainBorderPane);
@@ -80,26 +79,41 @@ public class LabGUI {
 //        stage.initStyle(StageStyle.TRANSPARENT);
     }
 
-    private void createLabAbilityWindow() {
+    private void addMainWindowChildren(Stage stage, LabSession labSession) {
+        mainBorderPane.setCenter(labBox);
+        labBox.add(getGridPane(new ImageView(mainCharImage)),0,0);
+        labBox.add((getGridPane(new StackPane(mainCharText))),1,0);
+        labBox.add(getGridPane(centreLabPointsPane),2,0);
+        labBox.add(getGridPane(new StackPane(spendLabGensButton)),3,0);
+        GridPane.setValignment(labBox, VPos.CENTER);
+        GridPane.setHalignment(labBox, HPos.CENTER);
+        labBox.setAlignment(Pos.CENTER);
+        centreLabPointsPane.getChildren().add(labPointsLabel);
+        spendLabGensButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> openLabAbilityWindow(mouseEvent, labSession));
+        mainBorderPane.setBottom(sessionBox);
+        sessionBox.setPadding(new Insets(30));
+        sessionBox.getChildren().add(newSessionButton);
+        stage.setTitle("Game");
+    }
+
+    @NotNull
+    private GridPane getGridPane(Node node) {
+        GridPane gridPane = new GridPane();
+        gridPane.add(new StackPane(node),0,0);
+        GridPane.setHgrow(gridPane,Priority.ALWAYS);
+        gridPane.setAlignment(Pos.CENTER);
+        return gridPane;
+    }
+
+    private void createLabAbilityWindow(Stage stage) {
         abUpWindow = new Stage();
+        abUpWindow.setHeight(stage.getHeight());
+        abUpWindow.setWidth(stage.getWidth());
         abUpBorderPane = new BorderPane();
         abUpScene = new Scene(abUpBorderPane);
         abUpWindow.setTitle("Ability's");
         abUpInformPanel = new VBox();
         labAbilityGridPane = new GridPane();
-    }
-
-    private void addMainWindowChildren(Stage stage, LabSession labSession) {
-        mainBorderPane.setCenter(labBox);
-        labBox.getChildren().add(mainCharText);
-        labBox.getChildren().add(centreLabPointsPane);
-        centreLabPointsPane.getChildren().add(labPointsLabel);
-        centreLabPointsPane.getChildren().add(countLabGensLabel);
-        labBox.getChildren().add(spendLabGensButton);
-        spendLabGensButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> openLabAbilityWindow(mouseEvent, labSession));
-        mainBorderPane.setBottom(sessionBox);
-        sessionBox.getChildren().add(newSessionButton);
-        stage.setTitle("Game");
     }
 
     private void addLabAbilityWindowChildren(Stage stage, LabSession labSession) {
@@ -118,7 +132,7 @@ public class LabGUI {
             labSession.getGensFromCurFightSession();
             labSession.clearCurFightSession();
         }
-        countLabGensLabel.setText(String.valueOf(labSession.getGensCount()));
+        labPointsLabel.setText("Total gen's: " + labSession.getGensCount());
         mainCharText.setText(labSession.getMainCreature().toString());
     }
 

@@ -42,6 +42,7 @@ public class LabGUI {
     private GridPane labAbilityGridPane;
     private Scene mainScene;
     private Stage prevStage;
+    private Image mainCharImage;
 
     public LabGUI(Stage prevStage) {
         buildGameWindow(prevStage);
@@ -70,7 +71,7 @@ public class LabGUI {
     private void createMainWindowObjects(Stage stage) {
         mainBorderPane = new BorderPane();
         labBox = new HBox();
-        Image mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
+        mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
         labBox.getChildren().add(new ImageView(mainCharImage));
         mainCharText = new Text();
         centreLabPointsPane = new HBox();

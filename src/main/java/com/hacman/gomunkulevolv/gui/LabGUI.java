@@ -17,6 +17,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,13 +41,18 @@ public class LabGUI {
     private VBox abUpInformPanel;
     private GridPane labAbilityGridPane;
     private Scene mainScene;
+    private Stage prevStage;
     private Image mainCharImage;
 
-    public LabGUI(Stage stage) {
-        buildGameWindow(stage);
+    public LabGUI(Stage prevStage) {
+        buildGameWindow(prevStage);
     }
 
-    private void buildGameWindow(Stage stage) {
+    private void buildGameWindow(Stage prevStage) {
+        this.prevStage = prevStage;
+        Stage stage = new Stage();
+        stage.setHeight(prevStage.getHeight());
+        stage.setWidth(prevStage.getWidth());
         labSession = new LabSession();
         createMainWindowObjects(stage);
         createLabAbilityWindow(stage);
@@ -64,8 +70,9 @@ public class LabGUI {
 
     private void createMainWindowObjects(Stage stage) {
         mainBorderPane = new BorderPane();
-        labBox = new GridPane();
+        labBox = new HBox();
         mainCharImage = new Image(String.valueOf((getClass().getResource("/MainChar/slime.png"))));
+        labBox.getChildren().add(new ImageView(mainCharImage));
         mainCharText = new Text();
         centreLabPointsPane = new StackPane();
         labPointsLabel = new Label("Total gen's: " + labSession.getGensCount());
@@ -76,7 +83,7 @@ public class LabGUI {
         mainScene = new Scene(mainBorderPane);
         stage.setScene(mainScene);
         stage.setTitle("Game");
-//        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
     }
 
     private void addMainWindowChildren(Stage stage, LabSession labSession) {

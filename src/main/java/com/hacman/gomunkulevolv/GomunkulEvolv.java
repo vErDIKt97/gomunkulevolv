@@ -17,6 +17,7 @@ public class GomunkulEvolv extends Application {
         stage.setHeight(768);
 //        new LabGUI(stage);
         new MainMenuGUI(stage);
+
     }
 
 }

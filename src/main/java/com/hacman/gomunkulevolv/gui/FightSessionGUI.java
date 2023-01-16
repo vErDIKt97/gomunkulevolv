@@ -14,15 +14,18 @@ import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
@@ -86,19 +89,16 @@ public class FightSessionGUI {
         createObjects(stage);
         addChildrenMainPane(stage);
         addChildrenLvlUpPane(stage);
-        setAlignment();
-
-        GridPane.setHgrow(enemy1, Priority.ALWAYS);
-        BorderPane.setMargin(battleTextArea, new Insets(20, 10, 10, 10));
-        GridPane.setHgrow(enemy2, Priority.ALWAYS);
-        GridPane.setHgrow(enemy3, Priority.ALWAYS);
-        GridPane.setHgrow(enemy4, Priority.ALWAYS);
-        GridPane.setHgrow(enemy5, Priority.ALWAYS);
+        setAlignment(stage);
         stage.show();
+        addHandlerAfterShow();
+        createDefEnemyWindow(stage);
+    }
+
+    private void addHandlerAfterShow() {
         mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
         battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlayMainAttack());
         battleTextArea.addEventHandler(GameService.MyEvent.ENEMY_CREATURE_ATTACK, myEvent -> getPlayEnemyAttack());
-        createDefEnemyWindow(stage);
     }
 
     private void getPlayEnemyAttack() {
@@ -196,15 +196,28 @@ public class FightSessionGUI {
     private void createDefEnemyWindow(Stage stage) {
         defEnemyStage = new Stage();
         defEnemyStage.initModality(Modality.WINDOW_MODAL);
+        defEnemyStage.initStyle(StageStyle.TRANSPARENT);
         defEnemyStage.initOwner(stage.getScene().getWindow());
+        defEnemyStage.setWidth(stage.getWidth()/10*3);
+        defEnemyStage.setHeight(stage.getHeight()/10*2);
+        BorderPane defBorderPane = new BorderPane();
+        defBorderPane.setBorder(Border.stroke(Paint.valueOf("black")));
         HBox defEnemyHBox = new HBox();
         Button devourButton = new Button("Devour");
         devourButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getDevourEnemy);
         Button consumeButton = new Button("Consume");
         consumeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getAddEarnedGens);
+        Label label = new Label("What do you do with a defeated opponent?");
+        label.setPadding(new Insets(defEnemyStage.getHeight()/100*10));
+        label.setAlignment(Pos.CENTER);
+        defBorderPane.setCenter(defEnemyHBox);
+        defBorderPane.setTop(new StackPane(label));
         defEnemyHBox.getChildren().add(devourButton);
         defEnemyHBox.getChildren().add(consumeButton);
-        defEnemyStage.setScene(new Scene(defEnemyHBox));
+        defEnemyHBox.setSpacing(defEnemyStage.getWidth()/4);
+        defEnemyHBox.setAlignment(Pos.CENTER);
+        defEnemyHBox.setPadding(new Insets(stage.getHeight()/100*5));
+        defEnemyStage.setScene(new Scene(defBorderPane));
     }
 
     private void getAddEarnedGens(Event event) {
@@ -311,24 +324,26 @@ public class FightSessionGUI {
         }
     }
 
-    private void setAlignment() {
-        enemyCharText.setTextAlignment(TextAlignment.CENTER);
-        enemyCharPane.setAlignment(Pos.CENTER_LEFT);
-        enemyCharPane.setPadding(new Insets(10, 25, 10, 10));
-        BorderPane.setAlignment(enemyCharPane, Pos.CENTER);
+    private void setAlignment(Stage stage) {
+        mainBorderPane.setPadding(new Insets(stage.getHeight()/100*4));
         buttonBox.setAlignment(Pos.CENTER);
         enemy1.setAlignment(Pos.CENTER);
         enemy2.setAlignment(Pos.CENTER);
         enemy3.setAlignment(Pos.CENTER);
         enemy4.setAlignment(Pos.CENTER);
         enemy5.setAlignment(Pos.CENTER);
-        GridPane.setValignment(enemiesPane, VPos.CENTER);
         enemyText1.setTextAlignment(TextAlignment.CENTER);
         enemyText2.setTextAlignment(TextAlignment.CENTER);
         enemyText3.setTextAlignment(TextAlignment.CENTER);
         enemyText4.setTextAlignment(TextAlignment.CENTER);
         enemyText5.setTextAlignment(TextAlignment.CENTER);
-        buttonBox.setPadding(new Insets(10, 10, 10, 10));
+        buttonBox.setPadding(new Insets(10));
+        GridPane.setHgrow(enemy1, Priority.ALWAYS);
+        BorderPane.setMargin(battleTextArea, new Insets(20, 10, 10, 10));
+        GridPane.setHgrow(enemy2, Priority.ALWAYS);
+        GridPane.setHgrow(enemy3, Priority.ALWAYS);
+        GridPane.setHgrow(enemy4, Priority.ALWAYS);
+        GridPane.setHgrow(enemy5, Priority.ALWAYS);
     }
 
     private void abilityClick(FightSession fightSession, String title) {

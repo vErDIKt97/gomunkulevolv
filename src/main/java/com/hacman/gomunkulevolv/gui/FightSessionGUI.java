@@ -95,34 +95,9 @@ public class FightSessionGUI {
         createDefEnemyWindow(stage);
     }
 
-    private void addHandlerAfterShow() {
-        mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
-        battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlayMainAttack());
-        battleTextArea.addEventHandler(GameService.MyEvent.ENEMY_CREATURE_ATTACK, myEvent -> getPlayEnemyAttack());
-    }
-
-    private void getPlayEnemyAttack() {
-        enemyCharAttack.play();
-    }
-
-    private void getPlayMainAttack() {
-        mainCharAttack.play();
-    }
-
     private void createObjects(Stage stage) {
         CreateMainWindow(stage);
         CreateLvlUpWindow(stage);
-    }
-
-    private void CreateLvlUpWindow(Stage stage) {
-        buttonLevelUp = new Button("+");
-        lvlUpWindow = new Stage();
-        lvlUpWindow.initModality(Modality.WINDOW_MODAL);
-        lvlUpWindow.initOwner(stage);
-        lvlUpBorderPane = new BorderPane();
-        lvlUpScene = new Scene(lvlUpBorderPane);
-        lvlUpWindow.setTitle("Ability's");
-        lvlUpInformPanel = new VBox();
     }
 
     private void CreateMainWindow(Stage stage) {
@@ -162,80 +137,15 @@ public class FightSessionGUI {
         createEnemyCharImage();
     }
 
-    private void createEnemyCharImage() {
-        Image stateEnemyCharImage = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageState.png")));
-        enemyCharImage = new ImageView(stateEnemyCharImage);
-        Image[] attack = new Image[4];
-        for (int i = 0; i < 4; i++) {
-            attack[i] = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageAttack" + (i+1) + ".png")));
-        }
-        enemyCharAttack = new Timeline();
-        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> enemyCharImage.setImage(attack[0])));
-        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> enemyCharImage.setImage(attack[1])));
-        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> enemyCharImage.setImage(attack[2])));
-        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> enemyCharImage.setImage(attack[3])));
-        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> enemyCharImage.setImage(stateEnemyCharImage)));
-
-    }
-
-    private void createMainCharImage() {
-        Image stateMainCharImage = new Image(String.valueOf(getClass().getResource("/MainChar/slime.png")));
-        mainCharImage = new ImageView(stateMainCharImage);
-        Image[] attack = new Image[4];
-        for (int i = 0; i < 4; i++) {
-            attack[i] = new Image(String.valueOf(getClass().getResource("/MainChar/slimeAttack" + (i+1) + ".png")));
-        }
-        mainCharAttack = new Timeline();
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> mainCharImage.setImage(attack[0])));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> mainCharImage.setImage(attack[1])));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> mainCharImage.setImage(attack[2])));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> mainCharImage.setImage(attack[3])));
-        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> mainCharImage.setImage(stateMainCharImage)));
-    }
-
-    private void createDefEnemyWindow(Stage stage) {
-        defEnemyStage = new Stage();
-        defEnemyStage.initModality(Modality.WINDOW_MODAL);
-        defEnemyStage.initStyle(StageStyle.TRANSPARENT);
-        defEnemyStage.initOwner(stage.getScene().getWindow());
-        defEnemyStage.setWidth(stage.getWidth()/10*3);
-        defEnemyStage.setHeight(stage.getHeight()/10*2);
-        BorderPane defBorderPane = new BorderPane();
-        defBorderPane.setBorder(Border.stroke(Paint.valueOf("black")));
-        HBox defEnemyHBox = new HBox();
-        Button devourButton = new Button("Devour");
-        devourButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getDevourEnemy);
-        Button consumeButton = new Button("Consume");
-        consumeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getAddEarnedGens);
-        Label label = new Label("What do you do with a defeated opponent?");
-        label.setPadding(new Insets(defEnemyStage.getHeight()/100*10));
-        label.setAlignment(Pos.CENTER);
-        defBorderPane.setCenter(defEnemyHBox);
-        defBorderPane.setTop(new StackPane(label));
-        defEnemyHBox.getChildren().add(devourButton);
-        defEnemyHBox.getChildren().add(consumeButton);
-        defEnemyHBox.setSpacing(defEnemyStage.getWidth()/4);
-        defEnemyHBox.setAlignment(Pos.CENTER);
-        defEnemyHBox.setPadding(new Insets(stage.getHeight()/100*5));
-        defEnemyStage.setScene(new Scene(defBorderPane));
-    }
-
-    private void getAddEarnedGens(Event event) {
-        fightSession.addEarnedGens(fightSession.getMainCreature().getGensForConsume(fightSession.getEnemyCreatureList().get(0)));
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-        textGens = String.valueOf(fightSession.getEarnedGens());
-        containerGens.setText(labelGens + " " + textGens);
-        refreshTextMainCreature();
-    }
-
-    private void getDevourEnemy(Event event) {
-        fightSession.getMainCreature().devourEnemy(fightSession.getEnemyCreatureList().get(0));
-        ((Node) (event.getSource())).getScene().getWindow().hide();
-        refreshTextMainCreature();
-    }
-
-    private void refreshTextMainCreature() {
-        mainCharText.setText(fightSession.getMainCreature().toString());
+    private void CreateLvlUpWindow(Stage stage) {
+        buttonLevelUp = new Button("+");
+        lvlUpWindow = new Stage();
+        lvlUpWindow.initModality(Modality.WINDOW_MODAL);
+        lvlUpWindow.initOwner(stage);
+        lvlUpBorderPane = new BorderPane();
+        lvlUpScene = new Scene(lvlUpBorderPane);
+        lvlUpWindow.setTitle("Ability's");
+        lvlUpInformPanel = new VBox();
     }
 
     private void addChildrenMainPane(Stage stage) {
@@ -289,6 +199,104 @@ public class FightSessionGUI {
         fillAbilityPane(abilityGridPane, fightSession);
     }
 
+    private void addChildrenLvlUpPane(Stage stage) {
+        //lvlUpWindow
+        lvlUpBorderPane.setCenter(abilityGridPane);
+        lvlUpWindow.setScene(lvlUpScene);
+        lvlUpScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> onCloseAbWindow(stage));
+        lvlUpBorderPane.setRight(lvlUpInformPanel);
+    }
+
+    private void createDefEnemyWindow(Stage stage) {
+        defEnemyStage = new Stage();
+        defEnemyStage.initModality(Modality.WINDOW_MODAL);
+        defEnemyStage.initStyle(StageStyle.TRANSPARENT);
+        defEnemyStage.initOwner(stage.getScene().getWindow());
+        defEnemyStage.setWidth(stage.getWidth()/10*3);
+        defEnemyStage.setHeight(stage.getHeight()/10*2);
+        BorderPane defBorderPane = new BorderPane();
+        defBorderPane.setBorder(Border.stroke(Paint.valueOf("black")));
+        HBox defEnemyHBox = new HBox();
+        Button devourButton = new Button("Devour");
+        devourButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getDevourEnemy);
+        Button consumeButton = new Button("Consume");
+        consumeButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getAddEarnedGens);
+        Label label = new Label("What do you do with a defeated opponent?");
+        label.setPadding(new Insets(defEnemyStage.getHeight()/100*10));
+        label.setAlignment(Pos.CENTER);
+        defBorderPane.setCenter(defEnemyHBox);
+        defBorderPane.setTop(new StackPane(label));
+        defEnemyHBox.getChildren().add(devourButton);
+        defEnemyHBox.getChildren().add(consumeButton);
+        defEnemyHBox.setSpacing(defEnemyStage.getWidth()/4);
+        defEnemyHBox.setAlignment(Pos.CENTER);
+        defEnemyHBox.setPadding(new Insets(stage.getHeight()/100*5));
+        defEnemyStage.setScene(new Scene(defBorderPane));
+    }
+
+    private void addHandlerAfterShow() {
+        mainScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, this::returnOnPrevWindow);
+        battleTextArea.addEventHandler(GameService.MyEvent.MAIN_CREATURE_ATTACK, myEvent -> getPlayMainAttack());
+        battleTextArea.addEventHandler(GameService.MyEvent.ENEMY_CREATURE_ATTACK, myEvent -> getPlayEnemyAttack());
+    }
+
+    private void getPlayEnemyAttack() {
+        enemyCharAttack.play();
+    }
+
+    private void getPlayMainAttack() {
+        mainCharAttack.play();
+    }
+
+    private void createEnemyCharImage() {
+        Image stateEnemyCharImage = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageState.png")));
+        enemyCharImage = new ImageView(stateEnemyCharImage);
+        Image[] attack = new Image[4];
+        for (int i = 0; i < 4; i++) {
+            attack[i] = new Image(String.valueOf(getClass().getResource("/enemyChar/enemyChar1/imageAttack" + (i+1) + ".png")));
+        }
+        enemyCharAttack = new Timeline();
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> enemyCharImage.setImage(attack[0])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> enemyCharImage.setImage(attack[1])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> enemyCharImage.setImage(attack[2])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> enemyCharImage.setImage(attack[3])));
+        enemyCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> enemyCharImage.setImage(stateEnemyCharImage)));
+
+    }
+
+    private void createMainCharImage() {
+        Image stateMainCharImage = new Image(String.valueOf(getClass().getResource("/MainChar/slime.png")));
+        mainCharImage = new ImageView(stateMainCharImage);
+        Image[] attack = new Image[4];
+        for (int i = 0; i < 4; i++) {
+            attack[i] = new Image(String.valueOf(getClass().getResource("/MainChar/slimeAttack" + (i+1) + ".png")));
+        }
+        mainCharAttack = new Timeline();
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(40), actionEvent -> mainCharImage.setImage(attack[0])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(80), actionEvent -> mainCharImage.setImage(attack[1])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(120), actionEvent -> mainCharImage.setImage(attack[2])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(160), actionEvent -> mainCharImage.setImage(attack[3])));
+        mainCharAttack.getKeyFrames().add(new KeyFrame(Duration.millis(500), actionEvent -> mainCharImage.setImage(stateMainCharImage)));
+    }
+
+    private void getAddEarnedGens(Event event) {
+        fightSession.addEarnedGens(fightSession.getMainCreature().getGensForConsume(fightSession.getEnemyCreatureList().get(0)));
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+        textGens = String.valueOf(fightSession.getEarnedGens());
+        containerGens.setText(labelGens + " " + textGens);
+        refreshTextMainCreature();
+    }
+
+    private void getDevourEnemy(Event event) {
+        fightSession.getMainCreature().devourEnemy(fightSession.getEnemyCreatureList().get(0));
+        ((Node) (event.getSource())).getScene().getWindow().hide();
+        refreshTextMainCreature();
+    }
+
+    private void refreshTextMainCreature() {
+        mainCharText.setText(fightSession.getMainCreature().toString());
+    }
+
     private void enemyDefeat() {
         defEnemyStage.show();
     }
@@ -303,14 +311,6 @@ public class FightSessionGUI {
             ((Stage) ((Button) event.getSource()).getScene().getWindow()).close();
 
         prevScene.show();
-    }
-
-    private void addChildrenLvlUpPane(Stage stage) {
-        //lvlUpWindow
-        lvlUpBorderPane.setCenter(abilityGridPane);
-        lvlUpWindow.setScene(lvlUpScene);
-        lvlUpScene.getWindow().addEventHandler(WindowEvent.WINDOW_CLOSE_REQUEST, windowEvent -> onCloseAbWindow(stage));
-        lvlUpBorderPane.setRight(lvlUpInformPanel);
     }
 
     private void onCloseAbWindow(Stage stage) {

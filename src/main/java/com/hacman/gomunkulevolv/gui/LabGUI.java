@@ -32,7 +32,7 @@ public class LabGUI {
     private Text mainCharText;
     private Label labPointsLabel;
     private Button spendLabGensButton;
-    private StackPane sessionBox;
+    private HBox sessionBox;
     private Button newSessionButton;
     private StackPane centreLabPointsPane;
     private Stage abUpWindow;
@@ -43,6 +43,7 @@ public class LabGUI {
     private Scene mainScene;
     private Stage prevStage;
     private Image mainCharImage;
+    private Button backButton;
 
     public LabGUI(Stage prevStage) {
         buildGameWindow(prevStage);
@@ -76,13 +77,20 @@ public class LabGUI {
         centreLabPointsPane = new StackPane();
         labPointsLabel = new Label("Total gen's: " + labSession.getGensCount());
         spendLabGensButton = new Button("Spend gen's");
-        sessionBox = new StackPane();
+        sessionBox = new HBox();
         newSessionButton = new Button("Go to Battle!");
         newSessionButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> startNewSession(mouseEvent, stage));
+        backButton = new Button("Back to menu");
+        backButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> backToMainMenu(stage));
         mainScene = new Scene(mainBorderPane);
         stage.setScene(mainScene);
         stage.setTitle("Game");
         stage.initStyle(StageStyle.TRANSPARENT);
+    }
+
+    private void backToMainMenu(Stage stage) {
+        prevStage.show();
+        stage.getScene().getWindow().hide();
     }
 
     private void addMainWindowChildren(Stage stage, LabSession labSession) {
@@ -97,7 +105,10 @@ public class LabGUI {
         centreLabPointsPane.getChildren().add(labPointsLabel);
         spendLabGensButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> openLabAbilityWindow(mouseEvent, labSession));
         mainBorderPane.setBottom(sessionBox);
-        sessionBox.setPadding(new Insets(30));
+        sessionBox.setPadding(new Insets(stage.getHeight()/100*4));
+        sessionBox.setAlignment(Pos.CENTER);
+        sessionBox.setSpacing(stage.getWidth()/2);
+        sessionBox.getChildren().add(backButton);
         sessionBox.getChildren().add(newSessionButton);
         stage.setTitle("Game");
     }

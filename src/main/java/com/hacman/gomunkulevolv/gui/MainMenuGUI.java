@@ -62,7 +62,7 @@ public class MainMenuGUI {
     }
 
     private void newGameStart(Stage stage) {
-        stage.getScene().getWindow().hide();
         new LabGUI(stage);
+        stage.getScene().getWindow().hide();
     }
 }

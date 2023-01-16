@@ -76,6 +76,8 @@ public class FightSessionGUI {
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
         Stage stage = new Stage();
+        stage.setHeight(prevScene.getHeight());
+        stage.setWidth(prevScene.getWidth());
         buildMainWindow(stage);
         this.prevScene = prevScene;
     }
@@ -267,8 +269,6 @@ public class FightSessionGUI {
         enemies.add(enemyText3);
         enemies.add(enemyText4);
         enemies.add(enemyText5);
-        stage.setWidth(640);
-        stage.setHeight(480);
         fightSession.Init(enemies, enemyText1);
         mainCharText.setText(fightSession.getMainCreature().toString());
         enemyCharText.setText(fightSession.getEnemyCreatureList().get(0).toString());

@@ -1,6 +1,7 @@
 package com.hacman.gomunkulevolv;
 
 import com.hacman.gomunkulevolv.gui.LabGUI;
+import com.hacman.gomunkulevolv.gui.MainMenuGUI;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -12,7 +13,10 @@ public class GomunkulEvolv extends Application {
     @Override
     public void start(Stage stage) {
 //        new FightSessionGUI(stage);
-        new LabGUI(stage);
+        stage.setWidth(1024);
+        stage.setHeight(768);
+//        new LabGUI(stage);
+        new MainMenuGUI(stage);
     }
 
 }

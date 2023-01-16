@@ -16,6 +16,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -40,12 +41,17 @@ public class LabGUI {
     private VBox abUpInformPanel;
     private GridPane labAbilityGridPane;
     private Scene mainScene;
+    private Stage prevStage;
 
-    public LabGUI(Stage stage) {
-        buildGameWindow(stage);
+    public LabGUI(Stage prevStage) {
+        buildGameWindow(prevStage);
     }
 
-    private void buildGameWindow(Stage stage) {
+    private void buildGameWindow(Stage prevStage) {
+        this.prevStage = prevStage;
+        Stage stage = new Stage();
+        stage.setHeight(prevStage.getHeight());
+        stage.setWidth(prevStage.getWidth());
         labSession = new LabSession();
         createMainWindowObjects(stage);
         createLabAbilityWindow();
@@ -77,7 +83,7 @@ public class LabGUI {
         mainScene = new Scene(mainBorderPane);
         stage.setScene(mainScene);
         stage.setTitle("Game");
-//        stage.initStyle(StageStyle.TRANSPARENT);
+        stage.initStyle(StageStyle.TRANSPARENT);
     }
 
     private void createLabAbilityWindow() {

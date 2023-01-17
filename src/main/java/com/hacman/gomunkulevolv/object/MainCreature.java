@@ -12,7 +12,6 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private double expRatio = 1;
     private double lvlGate;
     private int skillPoint;
-    private final double randomModifyDamage = new Random().nextDouble(-5, 5);
     private final double randomModifyHealth = new Random().nextDouble(-20, 20) + 50;
     private double abModifyDamage = 0;
 
@@ -33,10 +32,6 @@ public class MainCreature extends Creature implements PlayableCharacter {
         this.exp = 0;
         this.lvlGate = level * 50;
         this.skillPoint = 0;
-    }
-
-    private double getRandomModifyDamage() {
-        return randomModifyDamage;
     }
 
     private double getRandomModifyHealth() {
@@ -82,7 +77,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     }
 
     private double getDamageOnFormulaDamage() {
-        return ((2.0 / 25.0) * Math.pow(this.getLevel() + 15, 2)) + getRandomModifyDamage() + getAbModifyDamage();
+        return ((2.0 / 25.0) * Math.pow(this.getLevel() + 15, 2)) + getAbModifyDamage();
     }
 
     @Override
@@ -167,5 +162,4 @@ public class MainCreature extends Creature implements PlayableCharacter {
         return creature.getLevel()*10;
 
     }
-
 }

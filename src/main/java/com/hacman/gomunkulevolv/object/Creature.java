@@ -56,7 +56,7 @@ public class Creature {
     }
 
     private double getDamageOnFormula() {
-        return Math.pow(2 * this.level + 5, 2) / 9 + 3 + new Random().nextDouble(-5, 5);
+        return Math.pow(2 * this.level + 5, 2) / 9 + 3;
     }
 
     double getLevelModify() {
@@ -103,7 +103,7 @@ public class Creature {
     }
 
     public double getDamage() {
-        return damage;
+        return damage + new Random().nextDouble(-3, 3);
     }
 
     public void setDamage(double damage) {

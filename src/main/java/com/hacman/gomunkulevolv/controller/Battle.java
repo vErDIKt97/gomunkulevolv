@@ -87,8 +87,9 @@ public class Battle implements Runnable {
             battleTextArea.fireEvent(new GameService.MyEvent(GameService.MyEvent.MAIN_CREATURE_ATTACK));
         }else if (mainCreature.getClass().equals(Creature.class))
             battleTextArea.fireEvent(new GameService.MyEvent(GameService.MyEvent.ENEMY_CREATURE_ATTACK));
+        double oldHealth = enemy.getCurHealth();
         if (successAttack(mainCreature, enemy))
-            return mainCreature.getName() + " attack " + enemy.getName() + " on " + String.format("%.2f",mainCreature.getDamage());
+            return mainCreature.getName() + " attack " + enemy.getName() + " on " + String.format("%.2f",oldHealth - enemy.getCurHealth());
         else return mainCreature.getName() + " fault attack " + enemy.getName();
     }
 

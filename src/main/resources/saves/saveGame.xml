@@ -3,6 +3,6 @@
 <properties>
 <comment>SaveGame</comment>
 <entry key="getCurrentLabAbilityMap">{Attack=Attack 3 cost: 50, Max health=Max health 1 cost: 100}</entry>
-<entry key="saveTime">Wed Jan 18 02:02:40 YEKT 2023</entry>
-<entry key="getGensCount">140</entry>
+<entry key="saveTime">Wed Jan 18 02:37:30 YEKT 2023</entry>
+<entry key="getGensCount">290</entry>
 </properties>

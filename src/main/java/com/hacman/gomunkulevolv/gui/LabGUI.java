@@ -3,6 +3,7 @@ package com.hacman.gomunkulevolv.gui;
 import com.hacman.gomunkulevolv.game.lab.ability.LabAbilities;
 import com.hacman.gomunkulevolv.game.lab.ability.LabAbility;
 import com.hacman.gomunkulevolv.game.session.LabSession;
+import com.hacman.gomunkulevolv.service.GameService;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -21,6 +22,7 @@ import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.EventObject;
 import java.util.Map;
@@ -52,8 +54,7 @@ public class LabGUI {
     private void buildGameWindow(Stage prevStage) {
         this.prevStage = prevStage;
         Stage stage = new Stage();
-        stage.setHeight(prevStage.getHeight());
-        stage.setWidth(prevStage.getWidth());
+        GameService.applyStageSettings(stage);
         labSession = new LabSession();
         createMainWindowObjects(stage);
         createLabAbilityWindow(stage);

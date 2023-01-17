@@ -30,6 +30,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -79,6 +80,7 @@ public class FightSessionGUI {
     public FightSessionGUI(Stage prevScene, FightSession fightSession) {
         this.fightSession = fightSession;
         Stage stage = new Stage();
+        GameService.applyStageSettings(stage);
         stage.setHeight(prevScene.getHeight());
         stage.setWidth(prevScene.getWidth());
         buildMainWindow(stage);

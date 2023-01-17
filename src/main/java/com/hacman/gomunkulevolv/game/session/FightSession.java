@@ -4,6 +4,7 @@ import com.hacman.gomunkulevolv.abilities.PlayableCharacter;
 import com.hacman.gomunkulevolv.controller.Battle;
 import com.hacman.gomunkulevolv.controller.EnemyCreator;
 import com.hacman.gomunkulevolv.object.Creature;
+import com.hacman.gomunkulevolv.object.MainCreature;
 import com.hacman.gomunkulevolv.service.GameService;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
@@ -20,14 +21,14 @@ public class FightSession {
     private Creature curEnemy;
     private int enemyLevel = 1;
     private float progress = 1;
-    private final PlayableCharacter mainCreature;
+    private final MainCreature mainCreature;
     private static EnemyCreator enemyCreator;
     private ArrayList<Creature> enemyCreatureList;
     private Future<?> mainCharThread;
     private Future<?> enemyCharThread;
     private int earnedGens = 0;
 
-    public FightSession(PlayableCharacter mainCreature) {
+    public FightSession(MainCreature mainCreature) {
         this.mainCreature = mainCreature;
     }
 
@@ -43,7 +44,7 @@ public class FightSession {
         curEnemy = enemyCreatureList.get(0);
     }
 
-    public PlayableCharacter getMainCreature() {
+    public MainCreature getMainCreature() {
         return mainCreature;
     }
 

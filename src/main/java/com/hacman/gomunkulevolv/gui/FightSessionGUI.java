@@ -5,6 +5,7 @@ import com.hacman.gomunkulevolv.abilities.PossibleAbility;
 import com.hacman.gomunkulevolv.game.session.FightSession;
 import com.hacman.gomunkulevolv.object.MainCreature;
 import com.hacman.gomunkulevolv.service.GameService;
+import com.hacman.gomunkulevolv.service.Saver;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.Event;
@@ -311,7 +312,6 @@ public class FightSessionGUI {
     private void returnOnPrevWindow(Event event) {
         if (event.getEventType() == MouseEvent.MOUSE_CLICKED)
             ((Stage) ((Button) event.getSource()).getScene().getWindow()).close();
-
         prevScene.show();
     }
 

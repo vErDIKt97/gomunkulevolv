@@ -18,7 +18,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
 
     public MainCreature(MainCreature mainCreature) {
         super(mainCreature);
-        this.exp = mainCreature.getExp();
+        this.exp = mainCreature.getCurExp();
         this.lvlGate = mainCreature.getLvlGate();
         this.skillPoint = mainCreature.getSkillPoint();
         this.expRatio = mainCreature.getExpRatio();
@@ -56,14 +56,14 @@ public class MainCreature extends Creature implements PlayableCharacter {
         return this;
     }
 
-    public double getExp() {
+    public double getCurExp() {
         return exp;
     }
 
     public void setExp(double exp) {
         this.exp = exp;
         while (this.lvlGate <= exp) {
-            this.setExp(this.getExp() - this.lvlGate);
+            this.setExp(this.getCurExp() - this.lvlGate);
             this.lvlUp();
         }
     }
@@ -125,7 +125,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     @SuppressWarnings("unused")
     @Override
     public void learnFromEnemy(Creature enemy) {
-        double formulaExp = this.getExp() + enemy.getLevel() * 20 * getExpRatio();
+        double formulaExp = this.getCurExp() + enemy.getLevel() * 20 * getExpRatio();
         this.setExp(formulaExp);
     }
 

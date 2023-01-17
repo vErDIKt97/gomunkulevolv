@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public interface PlayableCharacter {
-    double getExp();
+    double getCurExp();
 
     void setExp(double exp);
 

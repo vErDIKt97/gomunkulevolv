@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class LabSession {
     private MainCreature mainCreature;
-    private int gensCount = 0;
-    private final HashMap<LabAbilities, LabAbility> curLabAbility = new HashMap<>();
+    private int gensCount = 150;
+    private HashMap<LabAbilities, LabAbility> curLabAbility = new HashMap<>();
     private final HashMap<LabAbilities, LabAbility> possibleLabAbility = new HashMap<>();
 
     private FightSession curFightSession;
@@ -87,6 +87,11 @@ public class LabSession {
 
     public Map<LabAbilities, LabAbility> getCurrentLabAbilityMap() {
         return curLabAbility;
+    }
+
+    public void setCurLabAbility(HashMap<LabAbilities, LabAbility> curLabAbility) {
+        this.curLabAbility = curLabAbility;
+        appendAbilityModify();
     }
 
     public FightSession getCurFightSession() {

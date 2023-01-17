@@ -51,6 +51,12 @@ public class LabGUI {
     private Button saveButton;
 
     public LabGUI(Stage prevStage) {
+        labSession = new LabSession();
+        buildGameWindow(prevStage);
+    }
+
+    public LabGUI(Stage prevStage, LabSession loadGame) {
+        labSession = loadGame;
         buildGameWindow(prevStage);
     }
 
@@ -58,7 +64,6 @@ public class LabGUI {
         this.prevStage = prevStage;
         Stage stage = new Stage();
         GameService.applyStageSettings(stage);
-        labSession = new LabSession();
         createMainWindowObjects(stage);
         createLabAbilityWindow(stage);
         addMainWindowChildren(stage, labSession);

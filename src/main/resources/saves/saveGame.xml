@@ -2,15 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>SaveGame</comment>
-<entry key="mainCreature getLevel">1</entry>
-<entry key="mainCreature getCurrentAbilityList">{}</entry>
-<entry key="getCurrentLabAbilityMap">{Attack=Attack 2 cost: 50}</entry>
-<entry key="mainCreature getMaxHealth">253.45496112437115</entry>
-<entry key="mainCreature getDamage">22.545288656786298</entry>
-<entry key="mainCreature getCurHealth">253.45496112437115</entry>
-<entry key="mainCreature getCurExp">0.0</entry>
-<entry key="mainCreature getLvlGate">50.0</entry>
-<entry key="mainCreature getName">Hero</entry>
-<entry key="getGensCount">10</entry>
-<entry key="mainCreature getAtkSpeed">850</entry>
+<entry key="getCurrentLabAbilityMap">{Attack=Attack 3 cost: 50, Max health=Max health 1 cost: 100}</entry>
+<entry key="saveTime">Wed Jan 18 02:02:40 YEKT 2023</entry>
+<entry key="getGensCount">140</entry>
 </properties>

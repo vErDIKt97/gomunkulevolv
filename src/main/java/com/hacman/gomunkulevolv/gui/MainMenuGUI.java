@@ -1,11 +1,13 @@
 package com.hacman.gomunkulevolv.gui;
 
 import com.hacman.gomunkulevolv.service.GameService;
+import com.hacman.gomunkulevolv.service.Loader;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -29,19 +31,42 @@ public class MainMenuGUI {
     private TabPane optionsTabPane;
     private Stage optionsStage;
     private MenuButton resolution;
+    private Button loadGameButton;
+    private Stage loadStage;
+    private Button loadChosenGameButton;
 
     public MainMenuGUI(Stage stage) {
         GameService.applyStageSettings(stage);
         createMainWindowObjects(stage);
         createOptionsWindowObjects(stage);
         addMainWindowObjects(stage);
-        addOptionsWindowObjects(stage);
+        createLoadWindowObjects(stage);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
     }
 
-    private void addOptionsWindowObjects(Stage stage) {
+    private void createLoadWindowObjects(Stage stage) {
+        loadStage = new Stage();
+        loadStage.initOwner(stage);
+        loadStage.initModality(Modality.WINDOW_MODAL);
+        loadStage.setWidth(stage.getWidth()/3);
+        loadStage.setHeight(stage.getHeight()/3);
+        loadStage.initStyle(StageStyle.TRANSPARENT);
+        VBox box = new VBox();
+        loadChosenGameButton = new Button(Loader.readSaves());
+        loadChosenGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> loadLabSession(mouseEvent, stage));
+        Button exitLoadMenu = new Button("Exit");
+        exitLoadMenu.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> getClose(loadStage));
+        box.getChildren().add(loadChosenGameButton);
+        box.getChildren().add(exitLoadMenu);
+        loadStage.setScene(new Scene(box));
 
+    }
+
+    private void loadLabSession(MouseEvent mouseEvent, Stage stage) {
+        ((Node)mouseEvent.getSource()).getScene().getWindow().hide();
+        stage.hide();
+        new LabGUI(stage, Loader.loadGame());
     }
 
     private void addMainWindowObjects(Stage stage) {
@@ -125,16 +150,23 @@ public class MainMenuGUI {
         mainBackground = new BackgroundImage(new Image(String.valueOf(getClass().getResource("/MainStage/photo_2023-01-10_21-21-25.png"))), BackgroundRepeat.REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         mainBorderPane = new BorderPane();
         newGameButton = new Button("New Game");
+        loadGameButton = new Button("Load Game");
         optionsButton = new Button("Options");
         exitButton = new Button("Exit");
-        menuSelect = new VBox(newGameButton, optionsButton, exitButton);
+        menuSelect = new VBox(newGameButton, loadGameButton, optionsButton, exitButton);
         optionsButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> openOptionsWindow());
         exitButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> getClose(stage));
         newGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> newGameStart(stage));
+        loadGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> openLoadWindow(stage));
         menuSelect.setAlignment(Pos.CENTER);
         menuSelect.setSpacing(10);
         menuSelect.setPadding(new Insets(20));
         stage.setScene(new Scene(mainBorderPane));
+    }
+
+    private void openLoadWindow(Stage stage) {
+        loadChosenGameButton.setText(Loader.readSaves());
+        loadStage.show();
     }
 
     private void openOptionsWindow() {

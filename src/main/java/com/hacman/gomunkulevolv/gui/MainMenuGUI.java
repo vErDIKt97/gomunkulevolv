@@ -93,8 +93,10 @@ public class MainMenuGUI {
         optionsStage.close();
         try {
             GameService.saveSettings(mainStage);
+            GameService.loadSettings();
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
     }
 

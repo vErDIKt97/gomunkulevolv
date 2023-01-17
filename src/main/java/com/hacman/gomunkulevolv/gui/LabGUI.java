@@ -4,6 +4,8 @@ import com.hacman.gomunkulevolv.game.lab.ability.LabAbilities;
 import com.hacman.gomunkulevolv.game.lab.ability.LabAbility;
 import com.hacman.gomunkulevolv.game.session.LabSession;
 import com.hacman.gomunkulevolv.service.GameService;
+import com.hacman.gomunkulevolv.service.Saver;
+import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -46,6 +48,7 @@ public class LabGUI {
     private Stage prevStage;
     private Image mainCharImage;
     private Button backButton;
+    private Button saveButton;
 
     public LabGUI(Stage prevStage) {
         buildGameWindow(prevStage);
@@ -83,6 +86,8 @@ public class LabGUI {
         newSessionButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> startNewSession(mouseEvent, stage));
         backButton = new Button("Back to menu");
         backButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> backToMainMenu(stage));
+        saveButton = new Button("Save game");
+        saveButton.addEventHandler(ActionEvent.ACTION, actionEvent -> Saver.saveGame(labSession));
         mainScene = new Scene(mainBorderPane);
         stage.setScene(mainScene);
         stage.setTitle("Game");
@@ -108,8 +113,9 @@ public class LabGUI {
         mainBorderPane.setBottom(sessionBox);
         sessionBox.setPadding(new Insets(stage.getHeight()/100*4));
         sessionBox.setAlignment(Pos.CENTER);
-        sessionBox.setSpacing(stage.getWidth()/2);
+        sessionBox.setSpacing(stage.getWidth()/3);
         sessionBox.getChildren().add(backButton);
+        sessionBox.getChildren().add(saveButton);
         sessionBox.getChildren().add(newSessionButton);
         stage.setTitle("Game");
     }

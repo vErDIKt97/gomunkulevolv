@@ -3,24 +3,24 @@ package com.hacman.gomunkulevolv.abilities;
 import java.util.Random;
 
 public class EvadeAbility extends Ability {
-    private int evadeChance = 10;
+    private double evadeChance = 10;
 
     public EvadeAbility(int abilityClass, String title) {
         super(abilityClass, title);
     }
 
     boolean isEvaded() {
-        return new Random().nextInt(0, 100) <= this.getEvadeChance();
+        return new Random().nextDouble(0, 100) <= this.getEvadeChance();
     }
 
-    private int getEvadeChance() {
+    private double getEvadeChance() {
         return evadeChance;
     }
 
     @Override
     public void lvlUp() {
         super.lvlUp();
-        evadeChance = this.evadeChance * this.getAbilityLevel();
+        this.evadeChance = ((0.22*this.getAbilityLevel())/(1+0.22*this.getAbilityLevel()));
     }
 
     public boolean isAtkSuccess() {

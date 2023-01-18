@@ -20,7 +20,7 @@ public class EvadeAbility extends Ability {
     @Override
     public void lvlUp() {
         super.lvlUp();
-        this.evadeChance = ((0.22*this.getAbilityLevel())/(1+0.22*this.getAbilityLevel()));
+        this.evadeChance = ((0.22 * this.getAbilityLevel()) / (1 + 0.22 * this.getAbilityLevel()));
     }
 
     public boolean isAtkSuccess() {

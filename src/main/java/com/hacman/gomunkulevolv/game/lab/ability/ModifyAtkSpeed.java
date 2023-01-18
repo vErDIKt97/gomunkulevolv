@@ -13,7 +13,7 @@ public class ModifyAtkSpeed extends LabAbility {
     @Override
     public void modifyCreature(MainCreature creature) {
         super.modifyCreature(creature);
-        double modificationAtkSpeed = creature.getAtkSpeed() - this.getLabAbilityLevel()*0.2;
+        double modificationAtkSpeed = creature.getAtkSpeed() - this.getLabAbilityLevel()*20;
         creature.setAtkSpeed(modificationAtkSpeed);
     }
 

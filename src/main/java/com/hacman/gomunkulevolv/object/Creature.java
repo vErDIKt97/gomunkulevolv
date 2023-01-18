@@ -22,6 +22,8 @@ public class Creature {
     private boolean inBattle = false;
     private double levelModify = 1;
 
+    private int defence;
+
     public Creature(Creature creature) {
         this.curHealth = creature.getCurHealth();
         this.maxHealth = creature.getMaxHealth();
@@ -33,6 +35,15 @@ public class Creature {
         this.alive = creature.isAlive();
         this.damage = creature.getDamage();
         this.name = creature.getName();
+        this.defence = creature.getDefence();
+    }
+
+    public int getDefence() {
+        return defence;
+    }
+
+    public void setDefence(int defence) {
+        this.defence = defence;
     }
 
     public double getAtkSpeed() {
@@ -48,6 +59,7 @@ public class Creature {
         this.damage = getDamageOnFormula();
         this.curHealth = getCurHealthOnFormula();
         this.maxHealth = curHealth;
+        this.defence = new Random().nextInt(0,5);
         this.atkSpeed = new Random().nextLong(75, 100) * 10;
         this.currentAbilityList = new HashMap<>();
         this.name = name;
@@ -80,13 +92,13 @@ public class Creature {
                 health +
                 "\\" + GameService.getFormatDouble(maxHealth) +
                 "\n Attack: " + GameService.getFormatDouble(damage) +
+                "\n Defense: " + this.defence +
                 "\n Attack Speed:" + this.atkSpeed +
                 "\n Alive: " + this.isAlive() +
                 "\n Ability: " + this.currentAbilityList.values();
         return creature;
 
     }
-
 
 
     public double getMaxHealth() {
@@ -131,6 +143,7 @@ public class Creature {
 
     public void takeDamage(@NotNull Creature fromCreature) {
         double takenDamage = fromCreature.getDamage();
+        takenDamage -= takenDamage* ((0.06 * defence) / (1 + 0.06 * defence));
         takenDamage *= this.useDefAbility(fromCreature);
         curHealth -= takenDamage;
     }

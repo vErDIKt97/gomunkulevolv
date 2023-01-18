@@ -72,7 +72,7 @@ public class Battle implements Runnable {
 
     private void attackDelay() {
         try {
-            Thread.sleep(mainCreature.getAtkSpeed());
+            Thread.sleep((long) mainCreature.getAtkSpeed());
         } catch (InterruptedException e) {
             System.out.println("Thread Dead");
             mainCreature.setInBattle(false);

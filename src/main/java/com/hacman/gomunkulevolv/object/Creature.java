@@ -18,8 +18,7 @@ public class Creature {
     private int level;
     private final String name;
     private boolean alive;
-    private final long atkSpeed;
-
+    private double atkSpeed;
     private boolean inBattle = false;
     private double levelModify = 1;
 
@@ -36,8 +35,12 @@ public class Creature {
         this.name = creature.getName();
     }
 
-    public long getAtkSpeed() {
+    public double getAtkSpeed() {
         return atkSpeed;
+    }
+
+    public void setAtkSpeed(double atkSpeed) {
+        this.atkSpeed = atkSpeed;
     }
 
     public Creature(int level, String name) {

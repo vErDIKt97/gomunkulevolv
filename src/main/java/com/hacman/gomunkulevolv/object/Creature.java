@@ -59,8 +59,8 @@ public class Creature {
         this.damage = getDamageOnFormula();
         this.curHealth = getCurHealthOnFormula();
         this.maxHealth = curHealth;
-        this.defence = new Random().nextInt(0,5);
-        this.atkSpeed = new Random().nextLong(75, 100) * 10;
+        this.defence = (int) (new Random().nextInt(0,5) + level*1.5);
+        this.atkSpeed = new Random().nextLong(60, 70) * 10;
         this.currentAbilityList = new HashMap<>();
         this.name = name;
         this.alive = true;

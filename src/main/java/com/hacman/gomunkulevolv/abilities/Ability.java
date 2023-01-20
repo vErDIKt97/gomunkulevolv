@@ -22,22 +22,22 @@ public abstract class Ability {
 
     public static Ability newAbility(@NotNull PossibleAbility title) {
         switch (title) {
-            case EVADE -> {
+            case EVADE :
                 return new EvadeAbility(1, "Evading");
-            }
-            case SPIKE -> {
+
+            case SPIKE : {
                 return new SpikeAbility(1, "Spike");
             }
-            case TOXIC_ATTACK -> {
+            case TOXIC_ATTACK : {
                 return new ToxAtkAbility(1, "Toxic Attack");
             }
-            case TOXIC_SKIN -> {
+            case TOXIC_SKIN : {
                 return new ToxSkinAbility(1, "Toxic Skin");
             }
-            case VAMPIRE -> {
+            case VAMPIRE : {
                 return new VampireAbility(1, "Vampire");
             }
-            case REGENERATION -> {
+            case REGENERATION : {
                 return new RegenAbility(1, "Regeneration");
             }
         }

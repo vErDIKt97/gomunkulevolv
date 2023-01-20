@@ -72,7 +72,7 @@ public class FightSession {
         mainCharThread = executorService.submit(mainBattle);
         enemyCharThread = executorService.submit(enemyBattle);
         new Thread(() -> {
-            while (mainCharThread.state() == Future.State.RUNNING && enemyCharThread.state() == Future.State.RUNNING) {
+            while (!mainCharThread.isDone() && !enemyCharThread.isDone()) {
                 refreshTextMainAndEnemyChar(mainCharText, mainCreature, enemyCharText, curEnemy, enemyText1);
             }
             Battle.setBattleEnd(true);

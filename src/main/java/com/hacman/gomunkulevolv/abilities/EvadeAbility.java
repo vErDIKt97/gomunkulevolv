@@ -10,7 +10,7 @@ public class EvadeAbility extends Ability {
     }
 
     boolean isEvaded() {
-        return new Random().nextDouble(0, 100) <= this.getEvadeChance();
+        return new Random().nextInt(100) <= this.getEvadeChance();
     }
 
     private double getEvadeChance() {

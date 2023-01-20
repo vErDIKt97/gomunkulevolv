@@ -21,6 +21,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -218,7 +219,8 @@ public class FightSessionGUI {
         defEnemyStage.setWidth(stage.getWidth()/10*3);
         defEnemyStage.setHeight(stage.getHeight()/10*2);
         BorderPane defBorderPane = new BorderPane();
-        defBorderPane.setBorder(Border.stroke(Paint.valueOf("black")));
+        defBorderPane.setBorder(new Border(new BorderStroke(new Color(0.3, 0.3, 0.3, 0.4), BorderStrokeStyle.SOLID,
+                new CornerRadii(10), new BorderWidths(2))));
         HBox defEnemyHBox = new HBox();
         Button devourButton = new Button("Devour");
         devourButton.addEventHandler(MouseEvent.MOUSE_CLICKED, this::getDevourEnemy);

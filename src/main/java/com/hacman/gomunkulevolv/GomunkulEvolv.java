@@ -14,9 +14,7 @@ public class GomunkulEvolv extends Application {
 
     @Override
     public void start(Stage stage) {
-        GameService.loadSettings();
         new MainMenuGUI(stage);
-
     }
 
 }

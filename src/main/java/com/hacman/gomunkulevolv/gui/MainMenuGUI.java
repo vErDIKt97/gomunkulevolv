@@ -14,7 +14,9 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -36,13 +38,28 @@ public class MainMenuGUI {
     private Button loadChosenGameButton;
 
     public MainMenuGUI(Stage stage) {
-        GameService.applyStageSettings(stage);
         createMainWindowObjects(stage);
-        createOptionsWindowObjects(stage);
         addMainWindowObjects(stage);
-        createLoadWindowObjects(stage);
         stage.initStyle(StageStyle.TRANSPARENT);
         stage.show();
+        LoadSettingsFromFile(stage);
+        createOptionsWindowObjects(stage);
+        createLoadWindowObjects(stage);
+    }
+
+    private void LoadSettingsFromFile(Stage stage) {
+        if (!GameService.loadSettings().equals("Success")) {
+            Stage popup = new Stage();
+            popup.setScene(new Scene(new StackPane(new Text("The settings file was not found. The settings are set by default"))));
+            popup.setAlwaysOnTop(true);
+            popup.initOwner(stage);
+            popup.initModality(Modality.WINDOW_MODAL);
+            popup.setHeight(100);
+            popup.setWidth(400);
+            popup.show();
+        }
+        GameService.applyStageSettings(stage);
+        stage.centerOnScreen();
     }
 
     private void createLoadWindowObjects(Stage stage) {
@@ -54,6 +71,7 @@ public class MainMenuGUI {
         loadStage.initStyle(StageStyle.TRANSPARENT);
         VBox box = new VBox();
         loadChosenGameButton = new Button(Loader.readSaves());
+        loadChosenGameButton.setDisable(Loader.readSaves().equals("No saves"));
         loadChosenGameButton.addEventHandler(MouseEvent.MOUSE_CLICKED, mouseEvent -> loadLabSession(mouseEvent, stage));
         Button exitLoadMenu = new Button("Exit");
         exitLoadMenu.addEventHandler(MouseEvent.MOUSE_CLICKED,mouseEvent -> getClose(loadStage));
@@ -166,6 +184,7 @@ public class MainMenuGUI {
 
     private void openLoadWindow(Stage stage) {
         loadChosenGameButton.setText(Loader.readSaves());
+        loadChosenGameButton.setDisable(Loader.readSaves().equals("No saves"));
         loadStage.show();
     }
 

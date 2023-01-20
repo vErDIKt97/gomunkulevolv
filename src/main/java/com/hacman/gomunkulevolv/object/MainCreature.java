@@ -12,7 +12,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     private double expRatio = 1;
     private double lvlGate;
     private int skillPoint;
-    private final double randomModifyHealth = new Random().nextDouble(-20, 20) + 50;
+    private final double randomModifyHealth = new Random().nextInt(40) - 20 + 50;
     private double abModifyDamage = 0;
 
     public MainCreature(MainCreature mainCreature) {
@@ -159,7 +159,7 @@ public class MainCreature extends Creature implements PlayableCharacter {
     @Override
     public int getGensForConsume(Creature creature) {
         learnFromEnemy(creature);
-        return creature.getLevel()*10;
+        return creature.getLevel() * 10;
 
     }
 }

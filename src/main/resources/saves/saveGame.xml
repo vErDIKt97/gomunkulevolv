@@ -2,7 +2,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <comment>SaveGame</comment>
-<entry key="getCurrentLabAbilityMap">{Attack=Attack 3 cost: 50, Max health=Max health 1 cost: 100}</entry>
-<entry key="saveTime">Wed Jan 18 02:37:30 YEKT 2023</entry>
-<entry key="getGensCount">290</entry>
+<entry key="getCurrentLabAbilityMap">{Defense=Defense 2 cost: 150, Max health=Max health 1 cost: 100, Attack=Attack 12 cost: 50}</entry>
+<entry key="saveTime">Wed Jan 18 16:57:07 YEKT 2023</entry>
+<entry key="getGensCount">1320</entry>
 </properties>

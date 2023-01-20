@@ -1,18 +1,19 @@
 package com.hacman.gomunkulevolv.service;
 
-import com.hacman.gomunkulevolv.game.session.FightSession;
+import com.hacman.gomunkulevolv.Main;
 import com.hacman.gomunkulevolv.game.session.LabSession;
-import com.hacman.gomunkulevolv.object.Creature;
 import com.hacman.gomunkulevolv.object.MainCreature;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.util.Calendar;
 import java.util.Properties;
 
 public class Saver {
-    private static final String savePath = "src/main/resources/saves/";
+    private static final String savePath = "/saves/";
+    private static final String fileName = "saveGame.xml";
 
 /*    public static void saveGame(FightSession fightSession) {
         Properties saveGame = new Properties();
@@ -31,10 +32,10 @@ public class Saver {
         saveGame.setProperty("getCurrentLabAbilityMap", String.valueOf(labSession.getCurrentLabAbilityMap()));
         saveGame.setProperty("saveTime", String.valueOf(Calendar.getInstance().getTime()));
         try {
-            FileOutputStream fos = new FileOutputStream(savePath + "saveGame.xml");
-            saveGame.storeToXML(fos, "SaveGame", StandardCharsets.UTF_8);
+            FileOutputStream fos = new FileOutputStream(GameService.getPath(savePath, fileName));
+            saveGame.storeToXML(fos, "SaveGame", String.valueOf(StandardCharsets.UTF_8));
             fos.close();
-        } catch (IOException e) {
+        } catch (IOException | URISyntaxException e) {
             throw new RuntimeException(e);
         }
     }

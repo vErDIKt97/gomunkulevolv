@@ -11,19 +11,19 @@ public abstract class LabAbility {
     public static LabAbility newLabAbility(LabAbilities ability) {
         switch (ability) {
 
-            case ATTACK -> {
+            case ATTACK : {
                 return new ModifyAttack();
             }
-            case DEFENSE -> {
+            case DEFENSE : {
                 return new ModifyDefence();
             }
-            case ATTACK_SPEED -> {
+            case ATTACK_SPEED : {
                 return new ModifyAtkSpeed();
             }
-            case MAX_HEALTH -> {
+            case MAX_HEALTH : {
                 return new ModifyMaxHealth();
             }
-            default -> throw new IllegalStateException("Unexpected value: " + ability);
+            default : throw new IllegalStateException("Unexpected value: " + ability);
         }
     }
 

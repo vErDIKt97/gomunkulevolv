@@ -59,15 +59,15 @@ public class Creature {
         this.damage = getDamageOnFormula();
         this.curHealth = getCurHealthOnFormula();
         this.maxHealth = curHealth;
-        this.defence = (int) (new Random().nextInt(0,5) + level*1.5);
-        this.atkSpeed = new Random().nextLong(60, 70) * 10;
+        this.defence = (int) (new Random().nextInt(5) + level * 1.5);
+        this.atkSpeed = (new Random().nextInt(10) + 60) * 10;
         this.currentAbilityList = new HashMap<>();
         this.name = name;
         this.alive = true;
     }
 
     private double getCurHealthOnFormula() {
-        return Math.pow(3 * this.level + 8, 2) + 10 + new Random().nextDouble(-20, 20);
+        return Math.pow(3 * this.level + 8, 2) + 10 + new Random().nextInt(40) - 20;
     }
 
     private double getDamageOnFormula() {
@@ -118,7 +118,7 @@ public class Creature {
     }
 
     public double getDamage() {
-        return damage + new Random().nextDouble(-3, 3);
+        return damage + new Random().nextInt(6) - 3;
     }
 
     public void setDamage(double damage) {
@@ -143,7 +143,7 @@ public class Creature {
 
     public void takeDamage(@NotNull Creature fromCreature) {
         double takenDamage = fromCreature.getDamage();
-        takenDamage -= takenDamage* ((0.06 * defence) / (1 + 0.06 * defence));
+        takenDamage -= takenDamage * ((0.06 * defence) / (1 + 0.06 * defence));
         takenDamage *= this.useDefAbility(fromCreature);
         curHealth -= takenDamage;
     }
